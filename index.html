@@ -1,0 +1,4014 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mechanic Village - Premium Auto Parts Marketplace</title>
+    <style>
+        body {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #1a1a1a;
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        /* Header */
+        .header {
+            background-color: #2d2d2d;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+            gap: 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .logo-image {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);
+        }
+
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #dc2626;
+        }
+
+        .search-container-nav {
+            flex: 1;
+            max-width: 500px;
+            display: flex;
+            position: relative;
+        }
+
+        .search-input-nav {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 2px solid #404040;
+            border-radius: 25px;
+            background: #1a1a1a;
+            color: #e0e0e0;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .search-input-nav:focus {
+            border-color: #dc2626;
+        }
+
+        .search-btn-nav {
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #dc2626;
+            border: none;
+            border-radius: 20px;
+            padding: 0.5rem 1rem;
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .search-btn-nav:hover {
+            background: #b91c1c;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            gap: 2rem;
+            flex-shrink: 0;
+        }
+
+        .nav-menu a {
+            color: #e0e0e0;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-menu a:hover,
+        .nav-menu a.active {
+            color: #dc2626;
+        }
+
+        .nav-menu a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #dc2626;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-shrink: 0;
+            align-items: center;
+        }
+
+        .cart-icon {
+            position: relative;
+            background: #dc2626;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .cart-icon:hover {
+            background: #b91c1c;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ef4444;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: #e0e0e0;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #2d2d2d;
+            padding: 1rem;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+        }
+
+        .mobile-nav-menu {
+            display: flex;
+            justify-content: space-around;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .mobile-nav-menu a {
+            color: #e0e0e0;
+            text-decoration: none;
+            font-size: 0.9rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.2rem;
+        }
+
+        .mobile-nav-menu a:hover,
+        .mobile-nav-menu a.active {
+            color: #dc2626;
+        }
+
+        .btn {
+            padding: 0.5rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #dc2626;
+            color: #dc2626;
+        }
+
+        .btn-outline:hover {
+            background: #dc2626;
+            color: white;
+        }
+
+        .btn-primary {
+            background: #dc2626;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #b91c1c;
+        }
+
+        /* Main Content */
+        .main-content {
+            min-height: calc(100vh - 200px);
+            padding-bottom: 80px;
+        }
+
+        .page-section {
+            display: none;
+            padding: 2rem 0;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            padding: 4rem 0;
+            text-align: center;
+            overflow: hidden;
+            min-height: 500px;
+            display: flex;
+            align-items: center;
+        }
+
+        .hero-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .hero-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .hero-slide.active {
+            opacity: 1;
+        }
+
+        .hero-slide::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(26, 26, 26, 0.7);
+        }
+
+        .hero-slide:nth-child(1) {
+            background-image: url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+        }
+
+        .hero-slide:nth-child(2) {
+            background-image: url('https://images.unsplash.com/photo-1552519507-da3b142c6e3d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+        }
+
+        .hero-slide:nth-child(3) {
+            background-image: url('https://images.unsplash.com/photo-1494976388531-d1058494cdd8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+        }
+
+        .hero-slide:nth-child(4) {
+            background-image: url('https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+        }
+
+        .hero-slide:nth-child(5) {
+            background-image: url('https://images.unsplash.com/photo-1583121274602-3e2820c69888?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+        }
+
+        .hero-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: #b0b0b0;
+        }
+
+        /* AI Diagnosis Section */
+        .ai-diagnosis-section {
+            background: linear-gradient(135deg, #2d2d2d, #1a1a1a);
+            padding: 4rem 0;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ai-diagnosis-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="%23404040" stroke-width="0.5" opacity="0.3"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.1;
+        }
+
+        .ai-diagnosis-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 3rem;
+            align-items: start;
+            position: relative;
+            z-index: 1;
+        }
+
+        .ai-diagnosis-content {
+            background: rgba(26, 26, 26, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 3rem;
+            border: 2px solid #404040;
+            transition: border-color 0.3s;
+        }
+
+        .ai-diagnosis-content:hover {
+            border-color: #dc2626;
+        }
+
+        .ai-icon {
+            font-size: 4rem;
+            text-align: center;
+            margin-bottom: 1rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        .celebration {
+            animation: celebrate 1s ease-out;
+        }
+
+        @keyframes celebrate {
+            0% {
+                transform: scale(1) rotate(0deg);
+            }
+
+            25% {
+                transform: scale(1.2) rotate(-5deg);
+            }
+
+            50% {
+                transform: scale(1.3) rotate(5deg);
+            }
+
+            75% {
+                transform: scale(1.1) rotate(-2deg);
+            }
+
+            100% {
+                transform: scale(1) rotate(0deg);
+            }
+        }
+
+        .ai-diagnosis-content h2 {
+            font-size: 2.5rem;
+            color: #ffffff;
+            text-align: center;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #dc2626, #ef4444);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .ai-diagnosis-content>p {
+            text-align: center;
+            color: #b0b0b0;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        .diagnosis-form {
+            margin-bottom: 2rem;
+        }
+
+        .car-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .ai-diagnose-btn {
+            width: 100%;
+            font-size: 1.2rem;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
+        }
+
+        .ai-diagnose-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(220, 38, 38, 0.4);
+        }
+
+        .diagnosis-results {
+            margin-top: 2rem;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .diagnosis-results h3 {
+            color: #dc2626;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .diagnosis-card {
+            background: #2d2d2d;
+            border-radius: 15px;
+            padding: 2rem;
+            border: 2px solid #404040;
+        }
+
+        .diagnosis-problem {
+            margin-bottom: 1.5rem;
+        }
+
+        .diagnosis-problem h4 {
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+        }
+
+        .diagnosis-problem p {
+            color: #b0b0b0;
+            font-size: 1.1rem;
+        }
+
+        .recommended-parts h4 {
+            color: #ffffff;
+            margin-bottom: 1rem;
+        }
+
+        .parts-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .part-item {
+            background: #1a1a1a;
+            padding: 1rem;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #404040;
+            transition: border-color 0.3s;
+        }
+
+        .part-item:hover {
+            border-color: #dc2626;
+        }
+
+        .part-name {
+            color: #e0e0e0;
+            font-weight: 500;
+        }
+
+        .part-price {
+            color: #dc2626;
+            font-weight: bold;
+        }
+
+        .diagnosis-confidence {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .confidence-label {
+            color: #b0b0b0;
+            font-weight: 500;
+        }
+
+        .confidence-bar {
+            flex: 1;
+            height: 8px;
+            background: #404040;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #dc2626, #ef4444);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .confidence-percentage {
+            color: #dc2626;
+            font-weight: bold;
+        }
+
+        .ai-features {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .feature-item {
+            background: rgba(26, 26, 26, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            border: 2px solid #404040;
+            transition: all 0.3s;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-5px);
+            border-color: #dc2626;
+            box-shadow: 0 10px 30px rgba(220, 38, 38, 0.2);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-item h4 {
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .feature-item p {
+            color: #b0b0b0;
+            font-size: 0.9rem;
+        }
+
+        /* Features Section */
+        .features-section {
+            padding: 4rem 0;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .feature-card {
+            background: #2d2d2d;
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            border: 2px solid #404040;
+            transition: transform 0.3s, border-color 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: #dc2626;
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+
+        .feature-description {
+            color: #b0b0b0;
+        }
+
+        /* Filters */
+        .filters-section {
+            background: #2d2d2d;
+            padding: 2rem 0;
+            border-bottom: 2px solid #404040;
+        }
+
+        .filters-container {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .filter-group label {
+            font-size: 0.9rem;
+            color: #b0b0b0;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            padding: 0.5rem;
+            border: 2px solid #404040;
+            border-radius: 5px;
+            background: #1a1a1a;
+            color: #e0e0e0;
+            font-size: 0.9rem;
+        }
+
+        .filter-group select:focus,
+        .filter-group input:focus {
+            outline: none;
+            border-color: #dc2626;
+        }
+
+        .sort-options {
+            margin-left: auto;
+        }
+
+        /* Listings Grid */
+        .listings-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .listing-card {
+            background: #2d2d2d;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 2px solid #404040;
+            cursor: pointer;
+        }
+
+        .listing-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(220, 38, 38, 0.2);
+            border-color: #dc2626;
+        }
+
+        .listing-image {
+            height: 200px;
+            background: linear-gradient(45deg, #404040, #2d2d2d);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: #dc2626;
+            position: relative;
+        }
+
+        .listing-views {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 0.2rem 0.5rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+        }
+
+        .listing-info {
+            padding: 1rem;
+        }
+
+        .listing-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #ffffff;
+        }
+
+        .listing-price {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #dc2626;
+            margin-bottom: 0.5rem;
+        }
+
+        .listing-location {
+            color: #888;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        /* Detail Page */
+        .detail-page {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .image-gallery {
+            background: #2d2d2d;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .main-image {
+            width: 100%;
+            height: 400px;
+            background: linear-gradient(45deg, #404040, #2d2d2d);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: #dc2626;
+            cursor: zoom-in;
+        }
+
+        .thumbnail-strip {
+            display: flex;
+            gap: 0.5rem;
+            padding: 1rem;
+            background: #1a1a1a;
+        }
+
+        .thumbnail {
+            width: 60px;
+            height: 60px;
+            background: #404040;
+            border-radius: 5px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: border-color 0.3s;
+        }
+
+        .thumbnail.active {
+            border-color: #dc2626;
+        }
+
+        .detail-info {
+            background: #2d2d2d;
+            border-radius: 10px;
+            padding: 2rem;
+            height: fit-content;
+        }
+
+        .detail-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+
+        .detail-price {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #dc2626;
+            margin-bottom: 1.5rem;
+        }
+
+        .detail-specs {
+            margin-bottom: 2rem;
+        }
+
+        .spec-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #404040;
+        }
+
+        .contact-form {
+            margin-top: 2rem;
+        }
+
+        .contact-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .whatsapp-btn {
+            background: #25d366;
+            color: white;
+            flex: 1;
+        }
+
+        .call-btn {
+            background: #007bff;
+            color: white;
+            flex: 1;
+        }
+
+        .share-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .share-btn {
+            background: #404040;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 0.5rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .share-btn:hover {
+            background: #dc2626;
+        }
+
+        .sticky-price-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #2d2d2d;
+            padding: 1rem;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+            display: none;
+            z-index: 999;
+        }
+
+        .sticky-price-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Profile Page */
+        .profile-container {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .profile-sidebar {
+            background: #2d2d2d;
+            border-radius: 10px;
+            padding: 2rem;
+            height: fit-content;
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            background: #dc2626;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            margin: 0 auto 1rem;
+        }
+
+        .profile-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .profile-menu li {
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-menu a {
+            color: #e0e0e0;
+            text-decoration: none;
+            padding: 0.8rem 1rem;
+            display: block;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        .profile-menu a:hover,
+        .profile-menu a.active {
+            background: #dc2626;
+            color: white;
+        }
+
+        .profile-content {
+            background: #2d2d2d;
+            border-radius: 10px;
+            padding: 2rem;
+        }
+
+        .listings-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .listings-table th,
+        .listings-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #404040;
+        }
+
+        .listings-table th {
+            background: #1a1a1a;
+            color: #dc2626;
+            font-weight: bold;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-small {
+            padding: 0.3rem 0.8rem;
+            font-size: 0.8rem;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        /* Cart */
+        .cart-container {
+            max-width: 800px;
+            margin: 2rem auto;
+        }
+
+        .cart-item {
+            background: #2d2d2d;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .cart-item-image {
+            width: 80px;
+            height: 80px;
+            background: #404040;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #dc2626;
+            font-size: 1.5rem;
+        }
+
+        .cart-item-info {
+            flex: 1;
+        }
+
+        .cart-item-title {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .cart-item-price {
+            color: #dc2626;
+            font-weight: bold;
+        }
+
+        .cart-summary {
+            background: #2d2d2d;
+            border-radius: 10px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .summary-total {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #dc2626;
+            border-top: 2px solid #404040;
+            padding-top: 1rem;
+        }
+
+        /* Sell Form */
+        .sell-form {
+            max-width: 600px;
+            margin: 2rem auto;
+            background: #2d2d2d;
+            border-radius: 10px;
+            padding: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #e0e0e0;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #404040;
+            border-radius: 5px;
+            background: #1a1a1a;
+            color: #e0e0e0;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #dc2626;
+        }
+
+        .image-upload {
+            border: 2px dashed #404040;
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+
+        .image-upload:hover {
+            border-color: #dc2626;
+        }
+
+        .image-upload input {
+            display: none;
+        }
+
+        /* Services Section */
+        .services-section {
+            background: #2d2d2d;
+            padding: 4rem 0;
+            margin: 2rem 0;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .service-card {
+            background: #1a1a1a;
+            padding: 2rem;
+            border-radius: 10px;
+            border: 2px solid #404040;
+            transition: transform 0.3s, border-color 0.3s;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            border-color: #dc2626;
+        }
+
+        .service-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #dc2626;
+        }
+
+        .service-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+
+        .service-description {
+            color: #b0b0b0;
+            margin-bottom: 1rem;
+        }
+
+        .service-features {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .service-features li {
+            padding: 0.3rem 0;
+            color: #e0e0e0;
+        }
+
+        .service-features li::before {
+            content: '✓';
+            color: #dc2626;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+
+        /* Testimonials */
+        .testimonials-section {
+            padding: 4rem 0;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .testimonial-card {
+            background: #2d2d2d;
+            padding: 2rem;
+            border-radius: 10px;
+            border: 2px solid #404040;
+            text-align: center;
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 1.5rem;
+            color: #b0b0b0;
+        }
+
+        .testimonial-author {
+            font-weight: bold;
+            color: #dc2626;
+        }
+
+        .testimonial-role {
+            font-size: 0.9rem;
+            color: #888;
+        }
+
+        /* Load More */
+        .load-more {
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .load-more-btn {
+            background: #404040;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .load-more-btn:hover {
+            background: #dc2626;
+        }
+
+        /* Footer */
+        .footer {
+            background: #1a1a1a;
+            padding: 3rem 0 1rem;
+            margin-top: 4rem;
+            border-top: 2px solid #404040;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            color: #dc2626;
+            margin-bottom: 1rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section ul li a {
+            color: #b0b0b0;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section ul li a:hover {
+            color: #dc2626;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #404040;
+            color: #888;
+        }
+
+        .user-greeting {
+            color: #e0e0e0;
+            margin-right: 1rem;
+        }
+
+        /* Auth Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: #2d2d2d;
+            border-radius: 15px;
+            padding: 2rem;
+            max-width: 400px;
+            width: 90%;
+            position: relative;
+            border: 2px solid #404040;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: #e0e0e0;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .modal-close:hover {
+            color: #dc2626;
+        }
+
+        .modal h2 {
+            color: #ffffff;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .modal .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .modal .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #e0e0e0;
+        }
+
+        .modal .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #404040;
+            border-radius: 5px;
+            background: #1a1a1a;
+            color: #e0e0e0;
+            font-size: 1rem;
+        }
+
+        .modal .form-group input:focus {
+            outline: none;
+            border-color: #dc2626;
+        }
+
+        .modal-footer {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+
+        .modal-footer p {
+            color: #b0b0b0;
+            margin-top: 1rem;
+        }
+
+        .modal-footer a {
+            color: #dc2626;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .modal-footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Chatbot Styles */
+        .chatbot-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 2000;
+        }
+
+        .chatbot-toggle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(220, 38, 38, 0.4);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chatbot-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 25px rgba(220, 38, 38, 0.6);
+        }
+
+        .chatbot-toggle.active {
+            background: #404040;
+        }
+
+        .chatbot-window {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            width: 350px;
+            height: 500px;
+            background: #2d2d2d;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            border: 2px solid #404040;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chatbot-window.active {
+            display: flex;
+        }
+
+        .chatbot-header {
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            color: white;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .chatbot-header h4 {
+            margin: 0;
+            flex: 1;
+        }
+
+        .chatbot-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0.2rem;
+            border-radius: 3px;
+            transition: background 0.3s;
+        }
+
+        .chatbot-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .chatbot-messages {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .chatbot-message {
+            max-width: 80%;
+            padding: 0.8rem 1rem;
+            border-radius: 15px;
+            word-wrap: break-word;
+        }
+
+        .chatbot-message.bot {
+            background: #404040;
+            color: #e0e0e0;
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+        }
+
+        .chatbot-message.user {
+            background: #dc2626;
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+        }
+
+        .chatbot-typing {
+            display: none;
+            align-self: flex-start;
+            background: #404040;
+            color: #e0e0e0;
+            padding: 0.8rem 1rem;
+            border-radius: 15px;
+            border-bottom-left-radius: 5px;
+        }
+
+        .chatbot-typing.active {
+            display: block;
+        }
+
+        .typing-dots {
+            display: inline-flex;
+            gap: 0.2rem;
+        }
+
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #b0b0b0;
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+
+            0%,
+            60%,
+            100% {
+                transform: translateY(0);
+                opacity: 0.4;
+            }
+
+            30% {
+                transform: translateY(-10px);
+                opacity: 1;
+            }
+        }
+
+        .chatbot-input-container {
+            padding: 1rem;
+            border-top: 1px solid #404040;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .chatbot-input {
+            flex: 1;
+            padding: 0.8rem;
+            border: 2px solid #404040;
+            border-radius: 20px;
+            background: #1a1a1a;
+            color: #e0e0e0;
+            outline: none;
+            font-size: 0.9rem;
+        }
+
+        .chatbot-input:focus {
+            border-color: #dc2626;
+        }
+
+        .chatbot-send {
+            background: #dc2626;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s;
+        }
+
+        .chatbot-send:hover {
+            background: #b91c1c;
+        }
+
+        .chatbot-send:disabled {
+            background: #666;
+            cursor: not-allowed;
+        }
+
+        .chatbot-suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .chatbot-suggestion {
+            background: #1a1a1a;
+            border: 1px solid #404040;
+            color: #e0e0e0;
+            padding: 0.4rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .chatbot-suggestion:hover {
+            background: #dc2626;
+            border-color: #dc2626;
+            color: white;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .listings-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .ai-diagnosis-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .listings-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .detail-page {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-container {
+                grid-template-columns: 1fr;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .mobile-nav {
+                display: block;
+            }
+
+            .main-content {
+                padding-bottom: 120px;
+            }
+
+            .listings-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+
+            .filters-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .sort-options {
+                margin-left: 0;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .cart-item {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+
+            .ai-diagnosis-content {
+                padding: 2rem;
+            }
+
+            .ai-diagnosis-content h2 {
+                font-size: 2rem;
+            }
+
+            .car-details {
+                grid-template-columns: 1fr;
+            }
+
+            .ai-features {
+                gap: 1rem;
+            }
+
+            .feature-item {
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .listings-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-container {
+                padding: 0 1rem;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+
+            .chatbot-window {
+                width: calc(100vw - 40px);
+                height: calc(100vh - 140px);
+                bottom: 80px;
+                right: 20px;
+                left: 20px;
+            }
+
+            .contact-us .container>div {
+                grid-template-columns: 1fr !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="nav-container">
+            <div class="logo" onclick="showPage('home')">
+                <div class="logo-image">🔧</div>
+                <div class="logo-text">Mechanic Village</div>
+            </div>
+
+
+
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="#" onclick="showPage('home')" class="nav-link active">Home</a></li>
+                    <li id="nav-listings" style="display: none;"><a href="#" onclick="checkAuthAndNavigate('listings')"
+                            class="nav-link">Parts</a></li>
+                    <li id="nav-mechanics" style="display: none;"><a href="#"
+                            onclick="checkAuthAndNavigate('mechanics')" class="nav-link">Mechanics</a></li>
+                    <li><a href="#" onclick="checkAuthAndNavigate('sell')" class="nav-link">Sell</a></li>
+                    <li><a href="#" onclick="showPage('services')" class="nav-link">Services</a></li>
+                    <li id="nav-profile" style="display: none;"><a href="#" onclick="checkAuthAndNavigate('profile')"
+                            class="nav-link">Profile</a></li>
+                </ul>
+            </nav>
+
+            <div class="auth-buttons">
+                <button class="cart-icon" onclick="checkAuthAndNavigate('cart')">
+                    🛒
+                    <span class="cart-count">3</span>
+                </button>
+
+                <!-- Guest buttons -->
+                <div id="auth-buttons-guest" style="display: flex; gap: 1rem;">
+                    <a href="#" class="btn btn-outline" onclick="showLoginModal()">Login</a>
+                    <a href="#" class="btn btn-primary" onclick="showSignupModal()">Sign Up</a>
+                </div>
+
+                <!-- Logged in user buttons -->
+                <div id="auth-buttons-user" style="display: none; gap: 1rem; align-items: center;">
+                    <span class="user-greeting">Welcome, <span id="user-name">User</span>!</span>
+                    <a href="#" class="btn btn-outline" onclick="logout()">Logout</a>
+                </div>
+            </div>
+
+            <button class="mobile-menu-toggle">☰</button>
+        </div>
+    </header>
+
+    <!-- Mobile Navigation -->
+    <nav class="mobile-nav">
+        <ul class="mobile-nav-menu">
+            <li><a href="#" onclick="showPage('home')" class="mobile-nav-link active">
+                    🏠<br>Home
+                </a></li>
+            <li id="mobile-nav-listings" style="display: none;"><a href="#" onclick="checkAuthAndNavigate('listings')"
+                    class="mobile-nav-link">
+                    🔧<br>Parts
+                </a></li>
+            <li id="mobile-nav-mechanics" style="display: none;"><a href="#" onclick="checkAuthAndNavigate('mechanics')"
+                    class="mobile-nav-link">
+                    👨‍🔧<br>Mechanics
+                </a></li>
+            <li><a href="#" onclick="checkAuthAndNavigate('sell')" class="mobile-nav-link">
+                    💰<br>Sell
+                </a></li>
+            <li><a href="#" onclick="showPage('services')" class="mobile-nav-link">
+                    📋<br>Services
+                </a></li>
+            <li id="mobile-nav-profile" style="display: none;"><a href="#" onclick="checkAuthAndNavigate('profile')"
+                    class="mobile-nav-link">
+                    👤<br>Profile
+                </a></li>
+            <li id="mobile-nav-cart" style="display: none;"><a href="#" onclick="checkAuthAndNavigate('cart')"
+                    class="mobile-nav-link">
+                    🛒<br>Cart
+                </a></li>
+        </ul>
+    </nav>
+
+    <main class="main-content">
+        <!-- Home Page -->
+        <section id="home" class="page-section active">
+            <div class="hero">
+                <div class="hero-background">
+                    <div class="hero-slide active"></div>
+                    <div class="hero-slide"></div>
+                    <div class="hero-slide"></div>
+                    <div class="hero-slide"></div>
+                    <div class="hero-slide"></div>
+                </div>
+                <div class="hero-container">
+                    <h1>Premium Auto Spare Parts Marketplace</h1>
+                    <p>Buy and sell genuine spare parts with our community of trusted sellers</p>
+
+                    <!-- Hero Search Bar -->
+                    <div class="hero-search-container" style="max-width: 600px; margin: 2rem auto; position: relative;">
+                        <input type="text" class="hero-search-input"
+                            placeholder="Search for brake pads, filters, batteries..."
+                            style="width: 100%; padding: 1rem 1.5rem; border: 2px solid rgba(255,255,255,0.2); border-radius: 50px; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); color: white; font-size: 1.1rem; outline: none; transition: all 0.3s ease;">
+                        <button class="hero-search-btn"
+                            style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: linear-gradient(135deg, #dc2626, #b91c1c); border: none; border-radius: 40px; padding: 0.8rem 1.5rem; color: white; cursor: pointer; font-size: 1rem; font-weight: 600; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);">🔍
+                            Search</button>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="showPage('listings')"
+                        style="font-size: 1.1rem; padding: 1rem 2rem; margin-top: 1rem;">Browse All Parts</button>
+                </div>
+            </div>
+
+            <!-- AI Car Diagnosis Section -->
+            <div class="ai-diagnosis-section">
+                <div class="container">
+                    <div class="ai-diagnosis-container">
+                        <div class="ai-diagnosis-content">
+                            <div class="ai-icon">🤖</div>
+                            <h2>AI Car Diagnosis</h2>
+                            <p>Get instant diagnosis of your car problems using our advanced AI technology. Simply
+                                describe your symptoms and get recommended parts.</p>
+
+                            <div class="diagnosis-form">
+                                <div class="form-group">
+                                    <label>Describe your car problem:</label>
+                                    <textarea id="diagnosis-input"
+                                        placeholder="e.g., My car makes a squeaking noise when I brake, especially in the morning..."
+                                        rows="4"></textarea>
+                                </div>
+
+                                <div class="car-details">
+                                    <div class="form-group">
+                                        <label>Car Make</label>
+                                        <select id="car-make">
+                                            <option value="">Select Make</option>
+                                            <option value="toyota">Toyota</option>
+                                            <option value="honda">Honda</option>
+                                            <option value="nissan">Nissan</option>
+                                            <option value="hyundai">Hyundai</option>
+                                            <option value="kia">Kia</option>
+                                            <option value="mercedes">Mercedes</option>
+                                            <option value="bmw">BMW</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Year</label>
+                                        <select id="car-year">
+                                            <option value="">Select Year</option>
+                                            <option value="2024">2024</option>
+                                            <option value="2023">2023</option>
+                                            <option value="2022">2022</option>
+                                            <option value="2021">2021</option>
+                                            <option value="2020">2020</option>
+                                            <option value="2019">2019</option>
+                                            <option value="2018">2018</option>
+                                            <option value="older">Older</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <button class="btn btn-primary ai-diagnose-btn" onclick="runAIDiagnosis()">
+                                    🔍 Get AI Diagnosis
+                                </button>
+                            </div>
+
+                            <div id="diagnosis-results" class="diagnosis-results" style="display: none;">
+                                <h3>🎯 Diagnosis Results</h3>
+                                <div class="diagnosis-card">
+                                    <div class="diagnosis-problem">
+                                        <h4>Likely Problem:</h4>
+                                        <p id="diagnosed-problem">Worn brake pads causing metal-to-metal contact</p>
+                                    </div>
+
+                                    <div class="recommended-parts">
+                                        <h4>Recommended Parts:</h4>
+                                        <div class="parts-list" id="recommended-parts-list">
+                                            <!-- Parts will be populated by JavaScript -->
+                                        </div>
+                                    </div>
+
+                                    <div class="diagnosis-confidence">
+                                        <span class="confidence-label">Confidence Level:</span>
+                                        <div class="confidence-bar">
+                                            <div class="confidence-fill" id="confidence-fill" style="width: 85%"></div>
+                                        </div>
+                                        <span class="confidence-percentage" id="confidence-percentage">85%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ai-features">
+                            <div class="feature-item">
+                                <div class="feature-icon">⚡</div>
+                                <h4>Instant Results</h4>
+                                <p>Get diagnosis in seconds</p>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-icon">🎯</div>
+                                <h4>Accurate Analysis</h4>
+                                <p>AI trained on thousands of cases</p>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-icon">💰</div>
+                                <h4>Cost Effective</h4>
+                                <p>Find exact parts you need</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Featured Products Section -->
+            <div class="features-section">
+                <div class="container">
+                    <h2 style="text-align: center; margin-bottom: 2rem; color: #ffffff;">Featured Products</h2>
+                    <div class="listings-grid" id="home-listings-grid" style="margin-top: 2rem;">
+                        <!-- Featured products will be populated by JavaScript -->
+                    </div>
+                    <div style="text-align: center; margin-top: 2rem;">
+                        <button class="btn btn-primary" onclick="showPage('listings')"
+                            style="font-size: 1.1rem; padding: 1rem 2rem;">View All Products</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Testimonials -->
+            <div class="testimonials-section">
+                <div class="container">
+                    <h2 style="text-align: center; margin-bottom: 2rem; color: #ffffff;">What Our Customers Say</h2>
+                    <div class="testimonials-grid">
+                        <div class="testimonial-card">
+                            <div class="testimonial-text">"Found the exact brake pads I needed for my Toyota. Great
+                                quality and fast delivery!"</div>
+                            <div class="testimonial-author">Ahmed Ibrahim</div>
+                            <div class="testimonial-role">Car Owner, Lagos</div>
+                        </div>
+                        <div class="testimonial-card">
+                            <div class="testimonial-text">"As a mechanic, I rely on Mechanic Village for genuine parts.
+                                Never disappointed!"</div>
+                            <div class="testimonial-author">John Okafor</div>
+                            <div class="testimonial-role">Professional Mechanic</div>
+                        </div>
+                        <div class="testimonial-card">
+                            <div class="testimonial-text">"Selling my spare parts here has been incredibly easy. Great
+                                platform!"</div>
+                            <div class="testimonial-author">Sarah Adebayo</div>
+                            <div class="testimonial-role">Parts Dealer, Abuja</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Page -->
+        <section id="services" class="page-section">
+            <div class="services-section">
+                <div class="container">
+                    <h1 style="text-align: center; margin-bottom: 2rem; color: #ffffff;">Our Services</h1>
+                    <div class="services-grid">
+                        <div class="service-card">
+                            <div class="service-icon">🛒</div>
+                            <div class="service-title">Marketplace</div>
+                            <div class="service-description">Buy and sell auto spare parts with ease</div>
+                            <ul class="service-features">
+                                <li>Wide selection of genuine parts</li>
+                                <li>Verified sellers and buyers</li>
+                                <li>Secure payment system</li>
+                                <li>Quality guarantee</li>
+                            </ul>
+                        </div>
+                        <div class="service-card">
+                            <div class="service-icon">🔧</div>
+                            <div class="service-title">Installation Services</div>
+                            <div class="service-description">Professional installation by certified mechanics</div>
+                            <ul class="service-features">
+                                <li>Certified mechanics network</li>
+                                <li>Home/office service available</li>
+                                <li>Installation warranty</li>
+                                <li>Competitive pricing</li>
+                            </ul>
+                        </div>
+                        <div class="service-card">
+                            <div class="service-icon">📱</div>
+                            <div class="service-title">Mobile App</div>
+                            <div class="service-description">Shop on-the-go with our mobile application</div>
+                            <ul class="service-features">
+                                <li>iOS and Android apps</li>
+                                <li>Push notifications</li>
+                                <li>Offline browsing</li>
+                                <li>Quick reorder</li>
+                            </ul>
+                        </div>
+                        <div class="service-card">
+                            <div class="service-icon">🎯</div>
+                            <div class="service-title">Part Finder</div>
+                            <div class="service-description">Can't find what you need? We'll help you locate it</div>
+                            <ul class="service-features">
+                                <li>Expert consultation</li>
+                                <li>Custom sourcing</li>
+                                <li>Import services</li>
+                                <li>Bulk orders</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mechanics Page -->
+        <section id="mechanics" class="page-section">
+            <div class="filters-section">
+                <div class="container">
+                    <div class="filters-container">
+                        <div class="filter-group">
+                            <label>Specialization</label>
+                            <select id="specialization-filter">
+                                <option value="">All Specializations</option>
+                                <option value="engine">Engine Specialist</option>
+                                <option value="brake">Brake System</option>
+                                <option value="electrical">Electrical</option>
+                                <option value="transmission">Transmission</option>
+                                <option value="ac">Air Conditioning</option>
+                                <option value="general">General Repair</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-group">
+                            <label>Location</label>
+                            <select id="mechanic-location-filter">
+                                <option value="">All Locations</option>
+                                <option value="lagos">Lagos</option>
+                                <option value="abuja">Abuja</option>
+                                <option value="kano">Kano</option>
+                                <option value="ibadan">Ibadan</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-group">
+                            <label>Experience</label>
+                            <select id="experience-filter">
+                                <option value="">Any Experience</option>
+                                <option value="1-3">1-3 Years</option>
+                                <option value="4-7">4-7 Years</option>
+                                <option value="8-15">8-15 Years</option>
+                                <option value="15+">15+ Years</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-group">
+                            <label>Rating</label>
+                            <select id="rating-filter">
+                                <option value="">Any Rating</option>
+                                <option value="5">5 Stars</option>
+                                <option value="4">4+ Stars</option>
+                                <option value="3">3+ Stars</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-group sort-options">
+                            <label>Sort By</label>
+                            <select id="mechanic-sort-by">
+                                <option value="rating">Highest Rated</option>
+                                <option value="experience">Most Experienced</option>
+                                <option value="reviews">Most Reviews</option>
+                                <option value="price">Lowest Price</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container">
+                <div class="listings-grid" id="mechanics-grid">
+                    <!-- Mechanics will be populated by JavaScript -->
+                </div>
+
+                <div class="load-more">
+                    <button class="load-more-btn" onclick="loadMoreMechanics()">Load More Mechanics</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Listings Page -->
+        <section id="listings" class="page-section">
+            <div class="filters-section">
+                <div class="container">
+                    <div class="filters-container">
+                        <div class="filter-group">
+                            <label>Brand</label>
+                            <select id="brand-filter">
+                                <option value="">All Brands</option>
+                                <option value="bosch">Bosch</option>
+                                <option value="ngk">NGK</option>
+                                <option value="mann">Mann</option>
+                                <option value="denso">Denso</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-group">
+                            <label>Location</label>
+                            <select id="location-filter">
+                                <option value="">All Locations</option>
+                                <option value="lagos">Lagos</option>
+                                <option value="abuja">Abuja</option>
+                                <option value="kano">Kano</option>
+                                <option value="ibadan">Ibadan</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-group">
+                            <label>Min Price (₦)</label>
+                            <input type="number" id="min-price" placeholder="0">
+                        </div>
+
+                        <div class="filter-group">
+                            <label>Max Price (₦)</label>
+                            <input type="number" id="max-price" placeholder="1000000">
+                        </div>
+
+                        <div class="filter-group sort-options">
+                            <label>Sort By</label>
+                            <select id="sort-by">
+                                <option value="date">Latest</option>
+                                <option value="price-low">Price: Low to High</option>
+                                <option value="price-high">Price: High to Low</option>
+                                <option value="views">Most Viewed</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container">
+                <div class="listings-grid" id="listings-grid">
+                    <!-- Listings will be populated by JavaScript -->
+                </div>
+
+                <div class="load-more">
+                    <button class="load-more-btn" onclick="loadMoreListings()">Load More</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mechanic Detail Page -->
+        <section id="mechanic-detail" class="page-section">
+            <div class="container">
+                <div class="detail-page">
+                    <div class="image-gallery">
+                        <div class="main-image" id="mechanic-main-image"
+                            style="background: linear-gradient(135deg, #2d2d2d, #1a1a1a); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 2rem;">
+                            <div style="font-size: 4rem; margin-bottom: 1rem;">👨‍🔧</div>
+                            <div style="color: #dc2626; font-size: 1.2rem; font-weight: bold;">Professional Mechanic
+                            </div>
+                        </div>
+                        <div class="thumbnail-strip">
+                            <div class="thumbnail active"
+                                style="background: linear-gradient(45deg, #404040, #2d2d2d); display: flex; align-items: center; justify-content: center; color: #dc2626;">
+                                🏆</div>
+                            <div class="thumbnail"
+                                style="background: linear-gradient(45deg, #404040, #2d2d2d); display: flex; align-items: center; justify-content: center; color: #dc2626;">
+                                🔧</div>
+                            <div class="thumbnail"
+                                style="background: linear-gradient(45deg, #404040, #2d2d2d); display: flex; align-items: center; justify-content: center; color: #dc2626;">
+                                ⭐</div>
+                            <div class="thumbnail"
+                                style="background: linear-gradient(45deg, #404040, #2d2d2d); display: flex; align-items: center; justify-content: center; color: #dc2626;">
+                                📍</div>
+                        </div>
+                    </div>
+
+                    <div class="detail-info">
+                        <h1 class="detail-title" id="mechanic-detail-title">Ahmed Ibrahim</h1>
+                        <div class="detail-price" id="mechanic-detail-price">₦5,000/hour</div>
+
+                        <div class="mechanic-rating"
+                            style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+                            <div class="stars" style="color: #fbbf24; font-size: 1.2rem;">⭐⭐⭐⭐⭐</div>
+                            <span style="color: #b0b0b0;">(127 reviews)</span>
+                        </div>
+
+                        <div class="detail-specs">
+                            <div class="spec-row">
+                                <span>Specialization:</span>
+                                <span>Engine Specialist</span>
+                            </div>
+                            <div class="spec-row">
+                                <span>Experience:</span>
+                                <span>12 Years</span>
+                            </div>
+                            <div class="spec-row">
+                                <span>Certifications:</span>
+                                <span>ASE Certified</span>
+                            </div>
+                            <div class="spec-row">
+                                <span>Services:</span>
+                                <span>Mobile &amp; Workshop</span>
+                            </div>
+                            <div class="spec-row">
+                                <span>Location:</span>
+                                <span>Lagos, Nigeria</span>
+                            </div>
+                        </div>
+
+                        <div class="services-offered" style="margin-bottom: 2rem;">
+                            <h4 style="color: #ffffff; margin-bottom: 1rem;">Services Offered:</h4>
+                            <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                                <span
+                                    style="background: #404040; color: #e0e0e0; padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.9rem;">Engine
+                                    Repair</span>
+                                <span
+                                    style="background: #404040; color: #e0e0e0; padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.9rem;">Oil
+                                    Change</span>
+                                <span
+                                    style="background: #404040; color: #e0e0e0; padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.9rem;">Diagnostics</span>
+                                <span
+                                    style="background: #404040; color: #e0e0e0; padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.9rem;">Tune-up</span>
+                            </div>
+                        </div>
+
+                        <div class="contact-form">
+                            <div class="contact-buttons">
+                                <button class="btn whatsapp-btn">💬 WhatsApp</button>
+                                <button class="btn call-btn">📞 Call</button>
+                            </div>
+
+                            <button class="btn btn-primary" style="width: 100%; margin-bottom: 1rem;"
+                                onclick="bookMechanic()">📅 Book Appointment</button>
+
+                            <div class="share-buttons">
+                                <button class="share-btn">📱</button>
+                                <button class="share-btn">📧</button>
+                                <button class="share-btn">🔗</button>
+                                <button class="share-btn">📋</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reviews Section -->
+                <div style="margin-top: 3rem; background: #2d2d2d; border-radius: 15px; padding: 2rem;">
+                    <h3 style="color: #ffffff; margin-bottom: 2rem;">Customer Reviews</h3>
+
+                    <div class="review-item"
+                        style="border-bottom: 1px solid #404040; padding-bottom: 1.5rem; margin-bottom: 1.5rem;">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <div style="font-weight: bold; color: #e0e0e0;">John Okafor</div>
+                            <div style="color: #fbbf24;">⭐⭐⭐⭐⭐</div>
+                        </div>
+                        <p style="color: #b0b0b0; margin: 0;">"Excellent work on my Toyota engine. Very professional and
+                            completed the job quickly. Highly recommended!"</p>
+                        <div style="color: #888; font-size: 0.9rem; margin-top: 0.5rem;">2 weeks ago</div>
+                    </div>
+
+                    <div class="review-item"
+                        style="border-bottom: 1px solid #404040; padding-bottom: 1.5rem; margin-bottom: 1.5rem;">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <div style="font-weight: bold; color: #e0e0e0;">Sarah Adebayo</div>
+                            <div style="color: #fbbf24;">⭐⭐⭐⭐⭐</div>
+                        </div>
+                        <p style="color: #b0b0b0; margin: 0;">"Fixed my car's engine problem that other mechanics
+                            couldn't solve. Great diagnostic skills!"</p>
+                        <div style="color: #888; font-size: 0.9rem; margin-top: 0.5rem;">1 month ago</div>
+                    </div>
+
+                    <div class="review-item">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <div style="font-weight: bold; color: #e0e0e0;">Michael Eze</div>
+                            <div style="color: #fbbf24;">⭐⭐⭐⭐⭐</div>
+                        </div>
+                        <p style="color: #b0b0b0; margin: 0;">"Honest pricing and quality work. Ahmed is now my go-to
+                            mechanic for all engine issues."</p>
+                        <div style="color: #888; font-size: 0.9rem; margin-top: 0.5rem;">2 months ago</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Detail Page -->
+        <section id="detail" class="page-section">
+            <div class="container">
+                <div class="detail-page">
+                    <div class="image-gallery">
+                        <div class="main-image" id="main-image">🔧</div>
+                        <div class="thumbnail-strip">
+                            <div class="thumbnail active"></div>
+                            <div class="thumbnail"></div>
+                            <div class="thumbnail"></div>
+                            <div class="thumbnail"></div>
+                        </div>
+                    </div>
+
+                    <div class="detail-info">
+                        <h1 class="detail-title" id="detail-title">Premium Brake Pads Set</h1>
+                        <div class="detail-price" id="detail-price">₦25,000</div>
+
+                        <div class="detail-specs">
+                            <div class="spec-row">
+                                <span>Brand:</span>
+                                <span>Bosch</span>
+                            </div>
+                            <div class="spec-row">
+                                <span>Condition:</span>
+                                <span>New</span>
+                            </div>
+                            <div class="spec-row">
+                                <span>Year:</span>
+                                <span>2020-2024</span>
+                            </div>
+                            <div class="spec-row">
+                                <span>Model:</span>
+                                <span>Universal</span>
+                            </div>
+                            <div class="spec-row">
+                                <span>Location:</span>
+                                <span>Lagos, Nigeria</span>
+                            </div>
+                        </div>
+
+                        <div class="contact-form">
+                            <div class="contact-buttons">
+                                <button class="btn whatsapp-btn">💬 WhatsApp</button>
+                                <button class="btn call-btn">📞 Call</button>
+                            </div>
+
+                            <button class="btn btn-primary" style="width: 100%; margin-bottom: 1rem;"
+                                onclick="addToCart()">Add to Cart</button>
+
+                            <div class="share-buttons">
+                                <button class="share-btn">📱</button>
+                                <button class="share-btn">📧</button>
+                                <button class="share-btn">🔗</button>
+                                <button class="share-btn">📋</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sticky-price-bar" id="sticky-price-bar">
+                <div class="sticky-price-content">
+                    <div>
+                        <strong id="sticky-title">Premium Brake Pads Set</strong>
+                        <div style="color: #dc2626; font-weight: bold;" id="sticky-price">₦25,000</div>
+                    </div>
+                    <button class="btn btn-primary">Add to Cart</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Profile Page -->
+        <section id="profile" class="page-section">
+            <div class="container">
+                <div class="profile-container">
+                    <div class="profile-sidebar">
+                        <div class="profile-avatar">JD</div>
+                        <h3 style="text-align: center; margin-bottom: 2rem;">John Doe</h3>
+
+                        <ul class="profile-menu">
+                            <li><a href="#" onclick="showProfileSection('listings')" class="profile-link active">My
+                                    Listings</a></li>
+                            <li><a href="#" onclick="showProfileSection('settings')" class="profile-link">Account
+                                    Settings</a></li>
+                            <li><a href="#" onclick="showProfileSection('history')" class="profile-link">Purchase
+                                    History</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="profile-content">
+                        <div id="profile-listings" class="profile-section active">
+                            <h2>My Listings</h2>
+                            <table class="listings-table">
+                                <thead>
+                                    <tr>
+                                        <th>Item</th>
+                                        <th>Price</th>
+                                        <th>Views</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Brake Pads Set</td>
+                                        <td>₦25,000</td>
+                                        <td>156</td>
+                                        <td>Active</td>
+                                        <td class="action-buttons">
+                                            <button class="btn btn-primary btn-small">Edit</button>
+                                            <button class="btn btn-danger btn-small">Delete</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Engine Oil Filter</td>
+                                        <td>₦8,500</td>
+                                        <td>89</td>
+                                        <td>Sold</td>
+                                        <td class="action-buttons">
+                                            <button class="btn btn-primary btn-small">View</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Spark Plugs Set</td>
+                                        <td>₦15,000</td>
+                                        <td>203</td>
+                                        <td>Active</td>
+                                        <td class="action-buttons">
+                                            <button class="btn btn-primary btn-small">Edit</button>
+                                            <button class="btn btn-danger btn-small">Delete</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div id="profile-settings" class="profile-section" style="display: none;">
+                            <h2>Account Settings</h2>
+                            <form class="sell-form" style="margin: 0; background: transparent; padding: 0;">
+                                <div class="form-group">
+                                    <label>Full Name</label>
+                                    <input type="text" value="John Doe">
+                                </div>
+                                <div class="form-group">
+                                    <label>Email</label>
+                                    <input type="email" value="john@example.com">
+                                </div>
+                                <div class="form-group">
+                                    <label>Phone</label>
+                                    <input type="tel" value="+234 800 123 4567">
+                                </div>
+                                <div class="form-group">
+                                    <label>Location</label>
+                                    <select>
+                                        <option>Lagos</option>
+                                        <option>Abuja</option>
+                                        <option>Kano</option>
+                                        <option>Ibadan</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Update Profile</button>
+                            </form>
+                        </div>
+
+                        <div id="profile-history" class="profile-section" style="display: none;">
+                            <h2>Purchase History</h2>
+                            <table class="listings-table">
+                                <thead>
+                                    <tr>
+                                        <th>Item</th>
+                                        <th>Price</th>
+                                        <th>Date</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Car Battery</td>
+                                        <td>₦45,000</td>
+                                        <td>2024-01-15</td>
+                                        <td>Delivered</td>
+                                        <td class="action-buttons">
+                                            <button class="btn btn-primary btn-small">Review</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Tire Set</td>
+                                        <td>₦120,000</td>
+                                        <td>2024-01-10</td>
+                                        <td>In Transit</td>
+                                        <td class="action-buttons">
+                                            <button class="btn btn-primary btn-small">Track</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Cart Page -->
+        <section id="cart" class="page-section">
+            <div class="container">
+                <div class="cart-container">
+                    <h2>Shopping Cart</h2>
+
+                    <div class="cart-item">
+                        <div class="cart-item-image">🔧</div>
+                        <div class="cart-item-info">
+                            <div class="cart-item-title">Premium Brake Pads Set</div>
+                            <div class="cart-item-price">₦25,000</div>
+                        </div>
+                        <button class="btn btn-danger btn-small">Remove</button>
+                    </div>
+
+                    <div class="cart-item">
+                        <div class="cart-item-image">🔋</div>
+                        <div class="cart-item-info">
+                            <div class="cart-item-title">Car Battery</div>
+                            <div class="cart-item-price">₦45,000</div>
+                        </div>
+                        <button class="btn btn-danger btn-small">Remove</button>
+                    </div>
+
+                    <div class="cart-item">
+                        <div class="cart-item-image">⚡</div>
+                        <div class="cart-item-info">
+                            <div class="cart-item-title">Spark Plugs Set</div>
+                            <div class="cart-item-price">₦15,000</div>
+                        </div>
+                        <button class="btn btn-danger btn-small">Remove</button>
+                    </div>
+
+                    <div class="cart-summary">
+                        <div class="summary-row">
+                            <span>Subtotal:</span>
+                            <span>₦85,000</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Delivery:</span>
+                            <span>₦5,000</span>
+                        </div>
+                        <div class="summary-row summary-total">
+                            <span>Total:</span>
+                            <span>₦90,000</span>
+                        </div>
+                        <button class="btn btn-primary"
+                            style="width: 100%; margin-top: 1rem; font-size: 1.1rem;">Proceed to Checkout</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sell Page -->
+        <section id="sell" class="page-section">
+            <div class="container">
+                <div class="sell-form">
+                    <h2>List Your Spare Part</h2>
+
+                    <form>
+                        <div class="form-group">
+                            <label>Part Title</label>
+                            <input type="text" placeholder="e.g., Premium Brake Pads Set">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Category</label>
+                            <select>
+                                <option>Select Category</option>
+                                <option>Engine Parts</option>
+                                <option>Brake System</option>
+                                <option>Electrical</option>
+                                <option>Suspension</option>
+                                <option>Filters</option>
+                                <option>Tires &amp; Wheels</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Brand</label>
+                            <input type="text" placeholder="e.g., Bosch, NGK, Mann">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Price (₦)</label>
+                            <input type="number" placeholder="25000">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Condition</label>
+                            <select>
+                                <option>New</option>
+                                <option>Used - Like New</option>
+                                <option>Used - Good</option>
+                                <option>Used - Fair</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Compatible Year</label>
+                            <input type="text" placeholder="e.g., 2018-2024">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Compatible Model</label>
+                            <input type="text" placeholder="e.g., Toyota Camry, Honda Accord">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Location</label>
+                            <select>
+                                <option>Lagos</option>
+                                <option>Abuja</option>
+                                <option>Kano</option>
+                                <option>Ibadan</option>
+                                <option>Port Harcourt</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea rows="4"
+                                placeholder="Describe the part, its condition, and any important details..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Images</label>
+                            <div class="image-upload" onclick="document.getElementById('image-input').click()">
+                                <input type="file" id="image-input" multiple="" accept="image/*">
+                                <div>📷</div>
+                                <p>Click to upload images (up to 5)</p>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" style="width: 100%; font-size: 1.1rem;">List
+                            Item</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Help Center Page -->
+        <section id="help-center" class="page-section">
+            <div class="container">
+                <h1 style="text-align: center; margin-bottom: 3rem; color: #ffffff;">Help Center</h1>
+
+                <div
+                    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
+                    <div class="service-card">
+                        <div class="service-icon">❓</div>
+                        <div class="service-title">Frequently Asked Questions</div>
+                        <div class="service-description">Find answers to common questions about buying and selling parts
+                        </div>
+                        <ul class="service-features">
+                            <li>How to buy parts safely</li>
+                            <li>Payment methods accepted</li>
+                            <li>Shipping and delivery info</li>
+                            <li>Return and refund policy</li>
+                        </ul>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-icon">🛡️</div>
+                        <div class="service-title">Safety Guidelines</div>
+                        <div class="service-description">Stay safe while buying and selling on our platform</div>
+                        <ul class="service-features">
+                            <li>Verify seller credentials</li>
+                            <li>Meet in safe public places</li>
+                            <li>Inspect parts before payment</li>
+                            <li>Report suspicious activity</li>
+                        </ul>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-icon">📋</div>
+                        <div class="service-title">Seller Guidelines</div>
+                        <div class="service-description">Best practices for selling your spare parts</div>
+                        <ul class="service-features">
+                            <li>Take clear, detailed photos</li>
+                            <li>Write accurate descriptions</li>
+                            <li>Set competitive prices</li>
+                            <li>Respond promptly to inquiries</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div style="background: #2d2d2d; border-radius: 15px; padding: 2rem; margin-bottom: 2rem;">
+                    <h3 style="color: #dc2626; margin-bottom: 1.5rem;">🔥 Popular Questions</h3>
+
+                    <div class="faq-item" style="border-bottom: 1px solid #404040; padding: 1rem 0;">
+                        <h4 style="color: #ffffff; margin-bottom: 0.5rem;">How do I know if a part is genuine?</h4>
+                        <p style="color: #b0b0b0;">Look for verified sellers, check part numbers, and ask for
+                            authenticity certificates. Our AI system also helps verify genuine parts.</p>
+                    </div>
+
+                    <div class="faq-item" style="border-bottom: 1px solid #404040; padding: 1rem 0;">
+                        <h4 style="color: #ffffff; margin-bottom: 0.5rem;">What payment methods do you accept?</h4>
+                        <p style="color: #b0b0b0;">We accept bank transfers, mobile money (Opay, PalmPay), and cash on
+                            delivery for verified sellers.</p>
+                    </div>
+
+                    <div class="faq-item" style="border-bottom: 1px solid #404040; padding: 1rem 0;">
+                        <h4 style="color: #ffffff; margin-bottom: 0.5rem;">How long does delivery take?</h4>
+                        <p style="color: #b0b0b0;">Delivery typically takes 1-3 business days within the same city, and
+                            3-7 days for inter-state deliveries.</p>
+                    </div>
+
+                    <div class="faq-item" style="padding: 1rem 0;">
+                        <h4 style="color: #ffffff; margin-bottom: 0.5rem;">Can I return a part if it doesn't fit?</h4>
+                        <p style="color: #b0b0b0;">Yes, you can return unused parts within 7 days if they don't match
+                            the description or fit your vehicle.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Us Page -->
+        <section id="contact-us" class="page-section">
+            <div class="container">
+                <h1 style="text-align: center; margin-bottom: 3rem; color: #ffffff;">Contact Us</h1>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-bottom: 3rem;">
+                    <div>
+                        <h3 style="color: #dc2626; margin-bottom: 2rem;">Get in Touch</h3>
+
+                        <div style="background: #2d2d2d; border-radius: 15px; padding: 2rem;">
+                            <form onsubmit="handleContactForm(event)">
+                                <div class="form-group">
+                                    <label>Your Name</label>
+                                    <input type="text" required="">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Email Address</label>
+                                    <input type="email" required="">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Phone Number</label>
+                                    <input type="tel">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Subject</label>
+                                    <select required="">
+                                        <option value="">Select Subject</option>
+                                        <option value="general">General Inquiry</option>
+                                        <option value="support">Technical Support</option>
+                                        <option value="seller">Seller Support</option>
+                                        <option value="complaint">Complaint</option>
+                                        <option value="partnership">Partnership</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Message</label>
+                                    <textarea rows="5" placeholder="Tell us how we can help you..."
+                                        required=""></textarea>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary" style="width: 100%;">Send Message</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 style="color: #dc2626; margin-bottom: 2rem;">Contact Information</h3>
+
+                        <div style="display: flex; flex-direction: column; gap: 2rem;">
+                            <div class="service-card" style="text-align: left;">
+                                <div class="service-icon" style="font-size: 2rem; margin-bottom: 1rem;">📞</div>
+                                <div class="service-title">Phone Support</div>
+                                <div class="service-description">Call us for immediate assistance</div>
+                                <div style="color: #dc2626; font-weight: bold; margin-top: 1rem;">
+                                    +234 800 MECHANIC<br>
+                                    +234 800 632 4264
+                                </div>
+                                <div style="color: #b0b0b0; font-size: 0.9rem; margin-top: 0.5rem;">
+                                    Mon-Fri: 8AM-8PM<br>
+                                    Sat-Sun: 9AM-5PM
+                                </div>
+                            </div>
+
+                            <div class="service-card" style="text-align: left;">
+                                <div class="service-icon" style="font-size: 2rem; margin-bottom: 1rem;">💬</div>
+                                <div class="service-title">WhatsApp Support</div>
+                                <div class="service-description">Chat with us on WhatsApp</div>
+                                <div style="color: #dc2626; font-weight: bold; margin-top: 1rem;">
+                                    +234 901 234 5678
+                                </div>
+                                <div style="color: #b0b0b0; font-size: 0.9rem; margin-top: 0.5rem;">
+                                    Available 24/7
+                                </div>
+                            </div>
+
+                            <div class="service-card" style="text-align: left;">
+                                <div class="service-icon" style="font-size: 2rem; margin-bottom: 1rem;">📧</div>
+                                <div class="service-title">Email Support</div>
+                                <div class="service-description">Send us an email anytime</div>
+                                <div style="color: #dc2626; font-weight: bold; margin-top: 1rem;">
+                                    support@mechanicvillage.ng<br>
+                                    sales@mechanicvillage.ng
+                                </div>
+                                <div style="color: #b0b0b0; font-size: 0.9rem; margin-top: 0.5rem;">
+                                    Response within 24 hours
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background: #2d2d2d; border-radius: 15px; padding: 2rem; text-align: center;">
+                    <h3 style="color: #ffffff; margin-bottom: 1rem;">Our Office Locations</h3>
+                    <div
+                        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 2rem;">
+                        <div>
+                            <h4 style="color: #dc2626;">Lagos Office</h4>
+                            <p style="color: #b0b0b0;">123 Mechanic Street, Victoria Island, Lagos</p>
+                        </div>
+                        <div>
+                            <h4 style="color: #dc2626;">Abuja Office</h4>
+                            <p style="color: #b0b0b0;">456 Auto Plaza, Wuse 2, Abuja</p>
+                        </div>
+                        <div>
+                            <h4 style="color: #dc2626;">Kano Office</h4>
+                            <p style="color: #b0b0b0;">789 Parts Avenue, Sabon Gari, Kano</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Terms of Service Page -->
+        <section id="terms" class="page-section">
+            <div class="container">
+                <div style="max-width: 800px; margin: 0 auto;">
+                    <h1 style="text-align: center; margin-bottom: 3rem; color: #ffffff;">Terms of Service</h1>
+
+                    <div style="background: #2d2d2d; border-radius: 15px; padding: 3rem;">
+                        <div style="color: #b0b0b0; line-height: 1.8;">
+                            <p style="margin-bottom: 2rem; color: #e0e0e0; font-size: 1.1rem;">
+                                <strong>Last updated: January 2024</strong>
+                            </p>
+
+                            <h3 style="color: #dc2626; margin: 2rem 0 1rem 0;">1. Acceptance of Terms</h3>
+                            <p>By accessing and using Mechanic Village, you accept and agree to be bound by the terms
+                                and provision of this agreement. If you do not agree to abide by the above, please do
+                                not use this service.</p>
+
+                            <h3 style="color: #dc2626; margin: 2rem 0 1rem 0;">2. Use License</h3>
+                            <p>Permission is granted to temporarily download one copy of Mechanic Village materials for
+                                personal, non-commercial transitory viewing only. This is the grant of a license, not a
+                                transfer of title, and under this license you may not:</p>
+                            <ul style="margin: 1rem 0; padding-left: 2rem;">
+                                <li>modify or copy the materials</li>
+                                <li>use the materials for any commercial purpose or for any public display</li>
+                                <li>attempt to reverse engineer any software contained on the website</li>
+                                <li>remove any copyright or other proprietary notations from the materials</li>
+                            </ul>
+
+                            <h3 style="color: #dc2626; margin: 2rem 0 1rem 0;">3. User Accounts</h3>
+                            <p>When you create an account with us, you must provide information that is accurate,
+                                complete, and current at all times. You are responsible for safeguarding the password
+                                and for all activities that occur under your account.</p>
+
+                            <h3 style="color: #dc2626; margin: 2rem 0 1rem 0;">4. Marketplace Rules</h3>
+                            <p>Users must comply with the following when buying or selling:</p>
+                            <ul style="margin: 1rem 0; padding-left: 2rem;">
+                                <li>Provide accurate descriptions of parts and services</li>
+                                <li>Honor all transactions and agreements</li>
+                                <li>Respect other users and maintain professional conduct</li>
+                                <li>Report any fraudulent or suspicious activity</li>
+                            </ul>
+
+                            <h3 style="color: #dc2626; margin: 2rem 0 1rem 0;">5. Payment and Fees</h3>
+                            <p>Mechanic Village may charge fees for certain services. All fees are non-refundable unless
+                                otherwise stated. Users are responsible for all applicable taxes.</p>
+
+                            <h3 style="color: #dc2626; margin: 2rem 0 1rem 0;">6. Limitation of Liability</h3>
+                            <p>Mechanic Village shall not be liable for any indirect, incidental, special,
+                                consequential, or punitive damages, including without limitation, loss of profits, data,
+                                use, goodwill, or other intangible losses.</p>
+
+                            <h3 style="color: #dc2626; margin: 2rem 0 1rem 0;">7. Contact Information</h3>
+                            <p>If you have any questions about these Terms of Service, please contact us at
+                                legal@mechanicvillage.ng</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Privacy Policy Page -->
+        <section id="privacy" class="page-section">
+            <div class="container">
+                <div style="max-width: 800px; margin: 0 auto;">
+                    <h1 style="text-align: center; margin-bottom: 3rem; color: #ffffff;">Privacy Policy</h1>
+
+                    <div style="background: #2d2d2d; border-radius: 15px; padding: 3rem;">
+                        <div style="color: #b0b0b0; line-height: 1.8;">
+                            <p style="margin-bottom: 2rem; color: #e0e0e0; font-size: 1.1rem;">
+                                <strong>Last updated: January 2024</strong>
+                            </p>
+
+                            <h3 style="color: #dc2626; margin: 2rem 0 1rem 0;">Information We Collect</h3>
+                            <p>We collect information you provide directly to us, such as when you create an account,
+                                make a purchase, or contact us for support. This may include:</p>
+                            <ul style="margin: 1rem 0; padding-left: 2rem;">
+                                <li>Name, email address, and phone number</li>
+                                <li>Billing and shipping addresses</li>
+                                <li>Payment information (processed securely by third parties)</li>
+                                <li>Communications with us</li>
+                            </ul>
+
+                            <h3 style="color: #dc2626; margin: 2rem 0 1rem 0;">How We Use Your Information</h3>
+                            <p>We use the information we collect to:</p>
+                            <ul style="margin: 1rem 0; padding-left: 2rem;">
+                                <li>Provide, maintain, and improve our services</li>
+                                <li>Process transactions and send related information</li>
+                                <li>Send you technical notices and support messages</li>
+                                <li>Respond to your comments and questions</li>
+                                <li>Prevent fraudulent transactions and monitor against theft</li>
+                            </ul>
+
+                            <h3 style="color: #dc2626; margin: 2rem 0 1rem 0;">Information Sharing</h3>
+                            <p>We do not sell, trade, or otherwise transfer your personal information to third parties
+                                without your consent, except as described in this policy. We may share your information
+                                with:</p>
+                            <ul style="margin: 1rem 0; padding-left: 2rem;">
+                                <li>Service providers who assist in our operations</li>
+                                <li>Law enforcement when required by law</li>
+                                <li>Other users as necessary to facilitate transactions</li>
+                            </ul>
+
+                            <h3 style="color: #dc2626; margin: 2rem 0 1rem 0;">Data Security</h3>
+                            <p>We implement appropriate security measures to protect your personal information against
+                                unauthorized access, alteration, disclosure, or destruction. However, no method of
+                                transmission over the internet is 100% secure.</p>
+
+                            <h3 style="color: #dc2626; margin: 2rem 0 1rem 0;">Your Rights</h3>
+                            <p>You have the right to:</p>
+                            <ul style="margin: 1rem 0; padding-left: 2rem;">
+                                <li>Access and update your personal information</li>
+                                <li>Delete your account and associated data</li>
+                                <li>Opt out of marketing communications</li>
+                                <li>Request a copy of your data</li>
+                            </ul>
+
+                            <h3 style="color: #dc2626; margin: 2rem 0 1rem 0;">Contact Us</h3>
+                            <p>If you have any questions about this Privacy Policy, please contact us at
+                                privacy@mechanicvillage.ng</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Mechanic Village</h3>
+                    <p>Your trusted marketplace for genuine auto spare parts across Nigeria.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#" onclick="showPage('home')">Home</a></li>
+                        <li><a href="#" onclick="checkAuthAndNavigate('listings')">Browse Parts</a></li>
+                        <li><a href="#" onclick="checkAuthAndNavigate('mechanics')">Find Mechanics</a></li>
+                        <li><a href="#" onclick="checkAuthAndNavigate('sell')">Sell Parts</a></li>
+                        <li><a href="#" onclick="showPage('services')">Services</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Support</h3>
+                    <ul>
+                        <li><a href="#" onclick="showPage('help-center')">Help Center</a></li>
+                        <li><a href="#" onclick="showPage('contact-us')">Contact Us</a></li>
+                        <li><a href="#" onclick="showPage('terms')">Terms of Service</a></li>
+                        <li><a href="#" onclick="showPage('privacy')">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Connect</h3>
+                    <ul>
+                        <li><a href="#" onclick="openWhatsApp()">📱 WhatsApp</a></li>
+                        <li><a href="#" onclick="openEmail()">📧 Email</a></li>
+                        <li><a href="#" onclick="openPhone()">📞 Call Center</a></li>
+                        <li><a href="#" onclick="showPage('contact-us')">📍 Locations</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2024 Mechanic Village. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div id="login-modal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('login-modal')">×</button>
+            <h2>Login to Your Account</h2>
+            <form onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label>Email or Phone</label>
+                    <input type="text" id="login-email" required="">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="login-password" required="">
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
+                    <p>Don't have an account? <a onclick="switchToSignup()">Sign up here</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div id="signup-modal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('signup-modal')">×</button>
+            <h2>Create Your Account</h2>
+            <form onsubmit="handleSignup(event)">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="signup-name" required="">
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="signup-email" required="">
+                </div>
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="tel" id="signup-phone" required="">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="signup-password" required="">
+                </div>
+                <div class="form-group">
+                    <label>Location</label>
+                    <select id="signup-location" required="">
+                        <option value="">Select Location</option>
+                        <option value="lagos">Lagos</option>
+                        <option value="abuja">Abuja</option>
+                        <option value="kano">Kano</option>
+                        <option value="ibadan">Ibadan</option>
+                        <option value="port-harcourt">Port Harcourt</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Create Account</button>
+                    <p>Already have an account? <a onclick="switchToLogin()">Login here</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Chatbot -->
+    <div class="chatbot-container">
+        <button class="chatbot-toggle" onclick="toggleChatbot()">💬</button>
+
+        <div class="chatbot-window" id="chatbot-window">
+            <div class="chatbot-header">
+                <div>🤖</div>
+                <h4>Mechanic Assistant</h4>
+                <button class="chatbot-close" onclick="toggleChatbot()">×</button>
+            </div>
+
+            <div class="chatbot-messages" id="chatbot-messages">
+                <div class="chatbot-message bot">
+                    Hi! I'm your Mechanic Village assistant. How can I help you today?
+                    <div class="chatbot-suggestions">
+                        <div class="chatbot-suggestion" onclick="sendSuggestion('Find brake pads for Toyota')">Find
+                            brake pads</div>
+                        <div class="chatbot-suggestion" onclick="sendSuggestion('How to sell parts?')">How to sell?
+                        </div>
+                        <div class="chatbot-suggestion" onclick="sendSuggestion('Find a mechanic near me')">Find
+                            mechanic</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chatbot-typing" id="chatbot-typing">
+                <div class="typing-dots">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+            </div>
+
+            <div class="chatbot-input-container">
+                <input type="text" class="chatbot-input" id="chatbot-input" placeholder="Type your message..."
+                    onkeypress="handleChatbotKeypress(event)">
+                <button class="chatbot-send" onclick="sendChatbotMessage()">➤</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Authentication state
+        let isLoggedIn = false;
+        let currentUser = null;
+
+        // Sample listings data
+        const listings = [
+            { id: 1, title: 'Premium Brake Pads Set', price: 25000, location: 'Lagos', views: 156, image: '🔧', brand: 'bosch' },
+            { id: 2, title: 'Engine Oil Filter', price: 8500, location: 'Abuja', views: 89, image: '🛢️', brand: 'mann' },
+            { id: 3, title: 'Spark Plugs Set', price: 15000, location: 'Lagos', views: 203, image: '⚡', brand: 'ngk' },
+            { id: 4, title: 'Car Battery', price: 45000, location: 'Kano', views: 124, image: '🔋', brand: 'exide' },
+            { id: 5, title: 'Tire Set (4pcs)', price: 120000, location: 'Ibadan', views: 78, image: '🛞', brand: 'michelin' },
+            { id: 6, title: 'Radiator', price: 35000, location: 'Lagos', views: 92, image: '🌡️', brand: 'denso' },
+            { id: 7, title: 'Air Filter', price: 8000, location: 'Abuja', views: 67, image: '🌪️', brand: 'bosch' },
+            { id: 8, title: 'Alternator', price: 55000, location: 'Lagos', views: 134, image: '⚡', brand: 'bosch' },
+            { id: 9, title: 'Shock Absorbers', price: 28000, location: 'Kano', views: 98, image: '🏎️', brand: 'monroe' },
+            { id: 10, title: 'Fuel Pump', price: 32000, location: 'Ibadan', views: 112, image: '⛽', brand: 'bosch' }
+        ];
+
+        // Sample mechanics data
+        const mechanics = [
+            { id: 1, name: 'Ahmed Ibrahim', specialization: 'engine', location: 'Lagos', experience: '12 Years', rating: 4.9, reviews: 127, price: 5000, image: '👨‍🔧', services: ['Engine Repair', 'Oil Change', 'Diagnostics', 'Tune-up'] },
+            { id: 2, name: 'John Okafor', specialization: 'brake', location: 'Abuja', experience: '8 Years', rating: 4.8, reviews: 89, price: 4500, image: '🔧', services: ['Brake Repair', 'Brake Pads', 'Brake Fluid', 'ABS System'] },
+            { id: 3, name: 'Sarah Adebayo', specialization: 'electrical', location: 'Lagos', experience: '15 Years', rating: 4.9, reviews: 203, price: 6000, image: '⚡', services: ['Electrical Repair', 'Wiring', 'Battery', 'Alternator'] },
+            { id: 4, name: 'Michael Eze', specialization: 'transmission', location: 'Kano', experience: '10 Years', rating: 4.7, reviews: 124, price: 5500, image: '⚙️', services: ['Transmission Repair', 'Clutch', 'Gearbox', 'Fluid Change'] },
+            { id: 5, name: 'Grace Okonkwo', specialization: 'ac', location: 'Ibadan', experience: '6 Years', rating: 4.6, reviews: 78, price: 4000, image: '❄️', services: ['AC Repair', 'Refrigerant', 'Compressor', 'Cooling System'] },
+            { id: 6, name: 'David Adamu', specialization: 'general', location: 'Lagos', experience: '20 Years', rating: 4.8, reviews: 156, price: 4500, image: '🔧', services: ['General Repair', 'Maintenance', 'Inspection', 'Tune-up'] },
+            { id: 7, name: 'Fatima Yusuf', specialization: 'engine', location: 'Abuja', experience: '9 Years', rating: 4.7, reviews: 92, price: 5200, image: '🛠️', services: ['Engine Diagnostics', 'Repair', 'Overhaul', 'Performance'] },
+            { id: 8, name: 'Peter Okwu', specialization: 'brake', location: 'Lagos', experience: '11 Years', rating: 4.9, reviews: 134, price: 4800, image: '🚗', services: ['Brake System', 'Safety Check', 'Disc Replacement', 'Hydraulics'] },
+            { id: 9, name: 'Aisha Mohammed', specialization: 'electrical', location: 'Kano', experience: '7 Years', rating: 4.5, reviews: 98, price: 4200, image: '🔌', services: ['Auto Electrical', 'Lighting', 'Sensors', 'ECU'] },
+            { id: 10, name: 'Emmanuel Obi', specialization: 'general', location: 'Ibadan', experience: '14 Years', rating: 4.8, reviews: 112, price: 4700, image: '👨‍🔧', services: ['Full Service', 'Maintenance', 'Repairs', 'Diagnostics'] }
+        ];
+
+        let currentPage = 1;
+        let filteredListings = [...listings];
+        let currentMechanicPage = 1;
+        let filteredMechanics = [...mechanics];
+
+        // Navigation
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page-section').forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Show selected page
+            document.getElementById(pageId).classList.add('active');
+
+            // Update nav links
+            document.querySelectorAll('.nav-link, .mobile-nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+
+            document.querySelectorAll(`[onclick="showPage('${pageId}')"]`).forEach(link => {
+                link.classList.add('active');
+            });
+
+            // Load listings if showing listings page
+            if (pageId === 'listings') {
+                loadListings();
+            }
+
+            // Load mechanics if showing mechanics page
+            if (pageId === 'mechanics') {
+                loadMechanics();
+            }
+
+            // Handle sticky nav
+            if (pageId === 'detail') {
+                window.addEventListener('scroll', handleStickyPrice);
+            } else {
+                window.removeEventListener('scroll', handleStickyPrice);
+                document.getElementById('sticky-price-bar').style.display = 'none';
+            }
+        }
+
+        // Load listings
+        function loadListings() {
+            const grid = document.getElementById('listings-grid');
+            grid.innerHTML = '';
+
+            const itemsToShow = currentPage * 10;
+            const itemsToDisplay = filteredListings.slice(0, itemsToShow);
+
+            itemsToDisplay.forEach(listing => {
+                const card = createListingCard(listing);
+                grid.appendChild(card);
+            });
+        }
+
+        function createListingCard(listing) {
+            const card = document.createElement('div');
+            card.className = 'listing-card';
+            card.onclick = () => showListingDetail(listing);
+
+            card.innerHTML = `
+                <div class="listing-image">
+                    ${listing.image}
+                    <div class="listing-views">${listing.views} views</div>
+                </div>
+                <div class="listing-info">
+                    <div class="listing-title">${listing.title}</div>
+                    <div class="listing-price">₦${listing.price.toLocaleString()}</div>
+                    <div class="listing-location">📍 ${listing.location}</div>
+                </div>
+            `;
+
+            return card;
+        }
+
+        function showListingDetail(listing) {
+            document.getElementById('detail-title').textContent = listing.title;
+            document.getElementById('detail-price').textContent = `₦${listing.price.toLocaleString()}`;
+            document.getElementById('main-image').textContent = listing.image;
+            document.getElementById('sticky-title').textContent = listing.title;
+            document.getElementById('sticky-price').textContent = `₦${listing.price.toLocaleString()}`;
+
+            showPage('detail');
+        }
+
+        function loadMoreListings() {
+            currentPage++;
+            loadListings();
+        }
+
+        // Load mechanics
+        function loadMechanics() {
+            const grid = document.getElementById('mechanics-grid');
+            grid.innerHTML = '';
+
+            const itemsToShow = currentMechanicPage * 10;
+            const itemsToDisplay = filteredMechanics.slice(0, itemsToShow);
+
+            itemsToDisplay.forEach(mechanic => {
+                const card = createMechanicCard(mechanic);
+                grid.appendChild(card);
+            });
+        }
+
+        function createMechanicCard(mechanic) {
+            const card = document.createElement('div');
+            card.className = 'listing-card';
+            card.onclick = () => showMechanicDetail(mechanic);
+
+            const stars = '⭐'.repeat(Math.floor(mechanic.rating));
+
+            card.innerHTML = `
+                <div class="listing-image">
+                    ${mechanic.image}
+                    <div class="listing-views">${mechanic.reviews} reviews</div>
+                </div>
+                <div class="listing-info">
+                    <div class="listing-title">${mechanic.name}</div>
+                    <div class="listing-price">₦${mechanic.price.toLocaleString()}/hour</div>
+                    <div style="color: #fbbf24; font-size: 0.9rem; margin: 0.3rem 0;">${stars} (${mechanic.rating})</div>
+                    <div style="color: #b0b0b0; font-size: 0.9rem; margin-bottom: 0.3rem;">${mechanic.specialization.charAt(0).toUpperCase() + mechanic.specialization.slice(1)} • ${mechanic.experience}</div>
+                    <div class="listing-location">📍 ${mechanic.location}</div>
+                </div>
+            `;
+
+            return card;
+        }
+
+        function showMechanicDetail(mechanic) {
+            document.getElementById('mechanic-detail-title').textContent = mechanic.name;
+            document.getElementById('mechanic-detail-price').textContent = `₦${mechanic.price.toLocaleString()}/hour`;
+
+            showPage('mechanic-detail');
+        }
+
+        function loadMoreMechanics() {
+            currentMechanicPage++;
+            loadMechanics();
+        }
+
+        function bookMechanic() {
+            if (!isLoggedIn) {
+                showLoginModal();
+                return;
+            }
+            alert('Booking request sent! The mechanic will contact you shortly to confirm the appointment.');
+        }
+
+        // Filters
+        document.getElementById('brand-filter').addEventListener('change', applyFilters);
+        document.getElementById('location-filter').addEventListener('change', applyFilters);
+        document.getElementById('min-price').addEventListener('input', applyFilters);
+        document.getElementById('max-price').addEventListener('input', applyFilters);
+        document.getElementById('sort-by').addEventListener('change', applyFilters);
+
+        // Mechanic filters
+        document.getElementById('specialization-filter').addEventListener('change', applyMechanicFilters);
+        document.getElementById('mechanic-location-filter').addEventListener('change', applyMechanicFilters);
+        document.getElementById('experience-filter').addEventListener('change', applyMechanicFilters);
+        document.getElementById('rating-filter').addEventListener('change', applyMechanicFilters);
+        document.getElementById('mechanic-sort-by').addEventListener('change', applyMechanicFilters);
+
+        function applyFilters() {
+            const brand = document.getElementById('brand-filter').value;
+            const location = document.getElementById('location-filter').value;
+            const minPrice = parseInt(document.getElementById('min-price').value) || 0;
+            const maxPrice = parseInt(document.getElementById('max-price').value) || Infinity;
+            const sortBy = document.getElementById('sort-by').value;
+
+            filteredListings = listings.filter(listing => {
+                return (!brand || listing.brand === brand) &&
+                    (!location || listing.location.toLowerCase() === location) &&
+                    (listing.price >= minPrice && listing.price <= maxPrice);
+            });
+
+            // Sort
+            switch (sortBy) {
+                case 'price-low':
+                    filteredListings.sort((a, b) => a.price - b.price);
+                    break;
+                case 'price-high':
+                    filteredListings.sort((a, b) => b.price - a.price);
+                    break;
+                case 'views':
+                    filteredListings.sort((a, b) => b.views - a.views);
+                    break;
+                default:
+                    filteredListings.sort((a, b) => b.id - a.id);
+            }
+
+            currentPage = 1;
+            loadListings();
+        }
+
+        function applyMechanicFilters() {
+            const specialization = document.getElementById('specialization-filter').value;
+            const location = document.getElementById('mechanic-location-filter').value;
+            const experience = document.getElementById('experience-filter').value;
+            const rating = parseInt(document.getElementById('rating-filter').value) || 0;
+            const sortBy = document.getElementById('mechanic-sort-by').value;
+
+            filteredMechanics = mechanics.filter(mechanic => {
+                const experienceYears = parseInt(mechanic.experience);
+                let experienceMatch = true;
+
+                if (experience === '1-3') experienceMatch = experienceYears >= 1 && experienceYears <= 3;
+                else if (experience === '4-7') experienceMatch = experienceYears >= 4 && experienceYears <= 7;
+                else if (experience === '8-15') experienceMatch = experienceYears >= 8 && experienceYears <= 15;
+                else if (experience === '15+') experienceMatch = experienceYears >= 15;
+
+                return (!specialization || mechanic.specialization === specialization) &&
+                    (!location || mechanic.location.toLowerCase() === location) &&
+                    experienceMatch &&
+                    (mechanic.rating >= rating);
+            });
+
+            // Sort mechanics
+            switch (sortBy) {
+                case 'experience':
+                    filteredMechanics.sort((a, b) => parseInt(b.experience) - parseInt(a.experience));
+                    break;
+                case 'reviews':
+                    filteredMechanics.sort((a, b) => b.reviews - a.reviews);
+                    break;
+                case 'price':
+                    filteredMechanics.sort((a, b) => a.price - b.price);
+                    break;
+                default:
+                    filteredMechanics.sort((a, b) => b.rating - a.rating);
+            }
+
+            currentMechanicPage = 1;
+            loadMechanics();
+        }
+
+        // Profile sections
+        function showProfileSection(sectionId) {
+            document.querySelectorAll('.profile-section').forEach(section => {
+                section.style.display = 'none';
+            });
+
+            document.getElementById(`profile-${sectionId}`).style.display = 'block';
+
+            document.querySelectorAll('.profile-link').forEach(link => {
+                link.classList.remove('active');
+            });
+
+            document.querySelector(`[onclick="showProfileSection('${sectionId}')"]`).classList.add('active');
+        }
+
+        // Cart functions
+        function addToCart() {
+            const currentCount = parseInt(document.querySelector('.cart-count').textContent);
+            document.querySelector('.cart-count').textContent = currentCount + 1;
+            alert('Item added to cart!');
+        }
+
+        // Sticky price bar
+        function handleStickyPrice() {
+            const detailInfo = document.querySelector('.detail-info');
+            const stickyBar = document.getElementById('sticky-price-bar');
+
+            if (detailInfo) {
+                const rect = detailInfo.getBoundingClientRect();
+                if (rect.bottom < 0) {
+                    stickyBar.style.display = 'block';
+                } else {
+                    stickyBar.style.display = 'none';
+                }
+            }
+        }
+
+        // Hero slider
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.hero-slide');
+
+        function nextSlide() {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + 1) % slides.length;
+            slides[currentSlide].classList.add('active');
+        }
+
+        setInterval(nextSlide, 4000);
+
+        // Authentication functions
+        function checkAuthAndNavigate(page) {
+            if (!isLoggedIn) {
+                showLoginModal();
+                return;
+            }
+            showPage(page);
+        }
+
+        function showLoginModal() {
+            document.getElementById('login-modal').classList.add('active');
+        }
+
+        function showSignupModal() {
+            document.getElementById('signup-modal').classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        function switchToSignup() {
+            closeModal('login-modal');
+            showSignupModal();
+        }
+
+        function switchToLogin() {
+            closeModal('signup-modal');
+            showLoginModal();
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            // Simple validation (in real app, this would be server-side)
+            if (email && password) {
+                isLoggedIn = true;
+                currentUser = {
+                    name: email.split('@')[0] || 'User',
+                    email: email
+                };
+
+                updateAuthUI();
+                closeModal('login-modal');
+                alert('Login successful! Welcome to Mechanic Village.');
+            }
+        }
+
+        function handleSignup(event) {
+            event.preventDefault();
+            const name = document.getElementById('signup-name').value;
+            const email = document.getElementById('signup-email').value;
+            const phone = document.getElementById('signup-phone').value;
+            const password = document.getElementById('signup-password').value;
+            const location = document.getElementById('signup-location').value;
+
+            if (name && email && phone && password && location) {
+                isLoggedIn = true;
+                currentUser = {
+                    name: name,
+                    email: email,
+                    phone: phone,
+                    location: location
+                };
+
+                updateAuthUI();
+                closeModal('signup-modal');
+                alert('Account created successfully! Welcome to Mechanic Village.');
+            }
+        }
+
+        function logout() {
+            isLoggedIn = false;
+            currentUser = null;
+            updateAuthUI();
+            showPage('home');
+            alert('You have been logged out successfully.');
+        }
+
+        function updateAuthUI() {
+            const guestButtons = document.getElementById('auth-buttons-guest');
+            const userButtons = document.getElementById('auth-buttons-user');
+            const userName = document.getElementById('user-name');
+
+            // Navigation elements
+            const navListings = document.getElementById('nav-listings');
+            const navProfile = document.getElementById('nav-profile');
+            const mobileNavListings = document.getElementById('mobile-nav-listings');
+            const mobileNavProfile = document.getElementById('mobile-nav-profile');
+            const mobileNavCart = document.getElementById('mobile-nav-cart');
+
+            if (isLoggedIn) {
+                // Show user buttons, hide guest buttons
+                guestButtons.style.display = 'none';
+                userButtons.style.display = 'flex';
+                userName.textContent = currentUser.name;
+
+                // Show member-only navigation items
+                navListings.style.display = 'block';
+                document.getElementById('nav-mechanics').style.display = 'block';
+                navProfile.style.display = 'block';
+                mobileNavListings.style.display = 'block';
+                document.getElementById('mobile-nav-mechanics').style.display = 'block';
+                mobileNavProfile.style.display = 'block';
+                mobileNavCart.style.display = 'block';
+            } else {
+                // Show guest buttons, hide user buttons
+                guestButtons.style.display = 'flex';
+                userButtons.style.display = 'none';
+
+                // Hide member-only navigation items
+                navListings.style.display = 'none';
+                document.getElementById('nav-mechanics').style.display = 'none';
+                navProfile.style.display = 'none';
+                mobileNavListings.style.display = 'none';
+                document.getElementById('mobile-nav-mechanics').style.display = 'none';
+                mobileNavProfile.style.display = 'none';
+                mobileNavCart.style.display = 'none';
+            }
+        }
+
+        // Hero search functionality
+        document.querySelector('.hero-search-btn').addEventListener('click', function () {
+            const searchTerm = document.querySelector('.hero-search-input').value;
+            if (searchTerm) {
+                // Filter listings by search term
+                filteredListings = listings.filter(listing =>
+                    listing.title.toLowerCase().includes(searchTerm.toLowerCase())
+                );
+                currentPage = 1;
+                showPage('listings');
+                loadListings();
+            }
+        });
+
+        // Enter key support for hero search
+        document.querySelector('.hero-search-input').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                document.querySelector('.hero-search-btn').click();
+            }
+        });
+
+        // Form submissions
+        document.querySelector('.sell-form form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            alert('Listing submitted successfully! It will be reviewed and published shortly.');
+        });
+
+        // Load featured products on home page
+        function loadFeaturedProducts() {
+            const homeGrid = document.getElementById('home-listings-grid');
+            if (homeGrid) {
+                homeGrid.innerHTML = '';
+
+                // Show first 10 products as featured
+                const featuredProducts = listings.slice(0, 10);
+
+                featuredProducts.forEach(listing => {
+                    const card = createListingCard(listing);
+                    homeGrid.appendChild(card);
+                });
+            }
+        }
+
+        // AI Diagnosis functionality
+        function runAIDiagnosis() {
+            const symptom = document.getElementById('diagnosis-input').value;
+            const carMake = document.getElementById('car-make').value;
+            const carYear = document.getElementById('car-year').value;
+
+            if (!symptom.trim()) {
+                alert('Please describe your car problem first.');
+                return;
+            }
+
+            // Show loading state
+            const btn = document.querySelector('.ai-diagnose-btn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '🔄 Analyzing...';
+            btn.disabled = true;
+
+            // Simulate AI processing
+            setTimeout(() => {
+                const diagnosis = generateDiagnosis(symptom, carMake, carYear);
+                displayDiagnosisResults(diagnosis);
+
+                // Reset button
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }, 2000);
+        }
+
+        function generateDiagnosis(symptom, carMake, carYear) {
+            // Simple AI simulation based on keywords
+            const symptomLower = symptom.toLowerCase();
+
+            let diagnosis = {
+                problem: '',
+                parts: [],
+                confidence: 75
+            };
+
+            if (symptomLower.includes('squeak') || symptomLower.includes('brake')) {
+                diagnosis.problem = 'Worn brake pads causing metal-to-metal contact';
+                diagnosis.parts = [
+                    { name: 'Premium Brake Pads Set', price: 25000 },
+                    { name: 'Brake Disc Rotors', price: 35000 }
+                ];
+                diagnosis.confidence = 85;
+            } else if (symptomLower.includes('engine') || symptomLower.includes('start')) {
+                diagnosis.problem = 'Engine starting issues - likely spark plugs or battery';
+                diagnosis.parts = [
+                    { name: 'Spark Plugs Set', price: 15000 },
+                    { name: 'Car Battery', price: 45000 }
+                ];
+                diagnosis.confidence = 78;
+            } else if (symptomLower.includes('oil') || symptomLower.includes('leak')) {
+                diagnosis.problem = 'Oil system issue - filter or gasket replacement needed';
+                diagnosis.parts = [
+                    { name: 'Engine Oil Filter', price: 8500 },
+                    { name: 'Oil Pan Gasket', price: 12000 }
+                ];
+                diagnosis.confidence = 82;
+            } else if (symptomLower.includes('tire') || symptomLower.includes('wheel')) {
+                diagnosis.problem = 'Tire or wheel alignment issues';
+                diagnosis.parts = [
+                    { name: 'Tire Set (4pcs)', price: 120000 },
+                    { name: 'Wheel Alignment Kit', price: 25000 }
+                ];
+                diagnosis.confidence = 70;
+            } else {
+                diagnosis.problem = 'General maintenance required - multiple components may need attention';
+                diagnosis.parts = [
+                    { name: 'Air Filter', price: 8000 },
+                    { name: 'Engine Oil Filter', price: 8500 },
+                    { name: 'Spark Plugs Set', price: 15000 }
+                ];
+                diagnosis.confidence = 65;
+            }
+
+            return diagnosis;
+        }
+
+        function displayDiagnosisResults(diagnosis) {
+            const resultsDiv = document.getElementById('diagnosis-results');
+            const problemDiv = document.getElementById('diagnosed-problem');
+            const partsListDiv = document.getElementById('recommended-parts-list');
+            const confidenceFill = document.getElementById('confidence-fill');
+            const confidencePercentage = document.getElementById('confidence-percentage');
+
+            // Add celebration animation to AI icon
+            const aiIcon = document.querySelector('.ai-icon');
+            aiIcon.classList.add('celebration');
+            setTimeout(() => aiIcon.classList.remove('celebration'), 1000);
+
+            // Update problem description
+            problemDiv.textContent = diagnosis.problem;
+
+            // Update parts list
+            partsListDiv.innerHTML = '';
+            diagnosis.parts.forEach(part => {
+                const partDiv = document.createElement('div');
+                partDiv.className = 'part-item';
+                partDiv.innerHTML = `
+                    <span class="part-name">${part.name}</span>
+                    <span class="part-price">₦${part.price.toLocaleString()}</span>
+                `;
+                partDiv.onclick = () => {
+                    // Find the part in listings and show details
+                    const listing = listings.find(l => l.title === part.name);
+                    if (listing) {
+                        showListingDetail(listing);
+                    }
+                };
+                partsListDiv.appendChild(partDiv);
+            });
+
+            // Update confidence
+            confidenceFill.style.width = diagnosis.confidence + '%';
+            confidencePercentage.textContent = diagnosis.confidence + '%';
+
+            // Show results
+            resultsDiv.style.display = 'block';
+            resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // Footer link functions
+        function openWhatsApp() {
+            window.open('https://wa.me/2349012345678?text=Hello%20Mechanic%20Village!%20I%20need%20help%20with...', '_blank', 'noopener,noreferrer');
+        }
+
+        function openEmail() {
+            window.open('mailto:support@mechanicvillage.ng?subject=Support%20Request&body=Hello%20Mechanic%20Village%20Team,%0A%0AI%20need%20help%20with...', '_blank', 'noopener,noreferrer');
+        }
+
+        function openPhone() {
+            window.open('tel:+2348006324264', '_blank', 'noopener,noreferrer');
+        }
+
+        function handleContactForm(event) {
+            event.preventDefault();
+            alert('Thank you for your message! We will get back to you within 24 hours.');
+        }
+
+        // Chatbot functionality
+        let chatbotOpen = false;
+        let chatbotMessages = [];
+
+        function toggleChatbot() {
+            const toggle = document.querySelector('.chatbot-toggle');
+            const window = document.getElementById('chatbot-window');
+
+            chatbotOpen = !chatbotOpen;
+
+            if (chatbotOpen) {
+                toggle.classList.add('active');
+                toggle.textContent = '✕';
+                window.classList.add('active');
+            } else {
+                toggle.classList.remove('active');
+                toggle.textContent = '💬';
+                window.classList.remove('active');
+            }
+        }
+
+        function sendChatbotMessage() {
+            const input = document.getElementById('chatbot-input');
+            const message = input.value.trim();
+
+            if (!message) return;
+
+            addChatbotMessage(message, 'user');
+            input.value = '';
+
+            // Show typing indicator
+            showTypingIndicator();
+
+            // Simulate bot response
+            setTimeout(() => {
+                hideTypingIndicator();
+                const response = generateChatbotResponse(message);
+                addChatbotMessage(response.text, 'bot', response.suggestions);
+            }, 1500);
+        }
+
+        function sendSuggestion(suggestion) {
+            document.getElementById('chatbot-input').value = suggestion;
+            sendChatbotMessage();
+        }
+
+        function handleChatbotKeypress(event) {
+            if (event.key === 'Enter') {
+                sendChatbotMessage();
+            }
+        }
+
+        function addChatbotMessage(text, sender, suggestions = []) {
+            const messagesContainer = document.getElementById('chatbot-messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `chatbot-message ${sender}`;
+            messageDiv.textContent = text;
+
+            if (suggestions && suggestions.length > 0) {
+                const suggestionsDiv = document.createElement('div');
+                suggestionsDiv.className = 'chatbot-suggestions';
+
+                suggestions.forEach(suggestion => {
+                    const suggestionBtn = document.createElement('div');
+                    suggestionBtn.className = 'chatbot-suggestion';
+                    suggestionBtn.textContent = suggestion.text;
+                    suggestionBtn.onclick = () => {
+                        if (suggestion.action) {
+                            suggestion.action();
+                        } else {
+                            sendSuggestion(suggestion.text);
+                        }
+                    };
+                    suggestionsDiv.appendChild(suggestionBtn);
+                });
+
+                messageDiv.appendChild(suggestionsDiv);
+            }
+
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function showTypingIndicator() {
+            document.getElementById('chatbot-typing').classList.add('active');
+            const messagesContainer = document.getElementById('chatbot-messages');
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function hideTypingIndicator() {
+            document.getElementById('chatbot-typing').classList.remove('active');
+        }
+
+        function generateChatbotResponse(message) {
+            const messageLower = message.toLowerCase();
+
+            // Parts search
+            if (messageLower.includes('brake') || messageLower.includes('pad')) {
+                return {
+                    text: "I found several brake pad options for you! Here are some popular choices:",
+                    suggestions: [
+                        { text: "View brake pads", action: () => { toggleChatbot(); showPage('listings'); } },
+                        { text: "Toyota brake pads", action: () => sendSuggestion("Show me Toyota brake pads") },
+                        { text: "Price range?", action: () => sendSuggestion("What's the price range for brake pads?") }
+                    ]
+                };
+            }
+
+            // Mechanic search
+            if (messageLower.includes('mechanic') || messageLower.includes('repair')) {
+                return {
+                    text: "I can help you find qualified mechanics in your area! We have specialists for all types of repairs.",
+                    suggestions: [
+                        { text: "Find mechanics", action: () => { toggleChatbot(); checkAuthAndNavigate('mechanics'); } },
+                        { text: "Engine specialist", action: () => sendSuggestion("Find engine specialist near me") },
+                        { text: "Brake specialist", action: () => sendSuggestion("Find brake specialist near me") }
+                    ]
+                };
+            }
+
+            // Selling
+            if (messageLower.includes('sell') || messageLower.includes('list')) {
+                return {
+                    text: "Great! Selling parts on Mechanic Village is easy. You can list your parts and reach thousands of buyers.",
+                    suggestions: [
+                        { text: "Start selling", action: () => { toggleChatbot(); checkAuthAndNavigate('sell'); } },
+                        { text: "Selling tips", action: () => sendSuggestion("What are some tips for selling parts?") },
+                        { text: "Pricing guide", action: () => sendSuggestion("How should I price my parts?") }
+                    ]
+                };
+            }
+
+            // Pricing
+            if (messageLower.includes('price') || messageLower.includes('cost')) {
+                return {
+                    text: "Prices vary depending on the part and brand. Here are some typical ranges:\n• Brake pads: ₦15,000 - ₦35,000\n• Batteries: ₦25,000 - ₦65,000\n• Filters: ₦5,000 - ₦15,000",
+                    suggestions: [
+                        { text: "Browse all parts", action: () => { toggleChatbot(); checkAuthAndNavigate('listings'); } },
+                        { text: "Compare prices", action: () => sendSuggestion("How do I compare prices?") }
+                    ]
+                };
+            }
+
+            // Help/Support
+            if (messageLower.includes('help') || messageLower.includes('support') || messageLower.includes('problem')) {
+                return {
+                    text: "I'm here to help! You can also contact our support team for more detailed assistance.",
+                    suggestions: [
+                        { text: "Contact support", action: () => { toggleChatbot(); showPage('contact-us'); } },
+                        { text: "Help center", action: () => { toggleChatbot(); showPage('help-center'); } },
+                        { text: "WhatsApp support", action: () => openWhatsApp() }
+                    ]
+                };
+            }
+
+            // Account/Login
+            if (messageLower.includes('account') || messageLower.includes('login') || messageLower.includes('sign')) {
+                return {
+                    text: "You need an account to buy parts, find mechanics, and sell items. It's free and takes just a minute!",
+                    suggestions: [
+                        { text: "Create account", action: () => { toggleChatbot(); showSignupModal(); } },
+                        { text: "Login", action: () => { toggleChatbot(); showLoginModal(); } },
+                        { text: "Account benefits", action: () => sendSuggestion("What are the benefits of having an account?") }
+                    ]
+                };
+            }
+
+            // AI Diagnosis
+            if (messageLower.includes('diagnos') || messageLower.includes('problem') || messageLower.includes('noise') || messageLower.includes('issue')) {
+                return {
+                    text: "Our AI diagnosis tool can help identify car problems! Just describe your symptoms and get instant recommendations.",
+                    suggestions: [
+                        { text: "Try AI diagnosis", action: () => { toggleChatbot(); showPage('home'); document.getElementById('diagnosis-input').focus(); } },
+                        { text: "Common problems", action: () => sendSuggestion("What are common car problems?") }
+                    ]
+                };
+            }
+
+            // Default response
+            return {
+                text: "I can help you with finding parts, mechanics, selling items, or general questions about Mechanic Village. What would you like to know?",
+                suggestions: [
+                    { text: "Find parts", action: () => { toggleChatbot(); checkAuthAndNavigate('listings'); } },
+                    { text: "Find mechanics", action: () => { toggleChatbot(); checkAuthAndNavigate('mechanics'); } },
+                    { text: "Sell parts", action: () => { toggleChatbot(); checkAuthAndNavigate('sell'); } },
+                    { text: "Get help", action: () => { toggleChatbot(); showPage('help-center'); } }
+                ]
+            };
+        }
+
+        // Initialize
+        loadListings();
+        loadMechanics();
+        loadFeaturedProducts();
+    </script>
+    <script>(function () { function c() { var b = a.contentDocument || a.contentWindow.document; if (b) { var d = b.createElement('script'); d.innerHTML = "window.__CF$cv$params={r:'98cb052a651d6f98',t:'MTc2MDE1MDcxNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);"; b.getElementsByTagName('head')[0].appendChild(d) } } if (document.body) { var a = document.createElement('iframe'); a.height = 1; a.width = 1; a.style.position = 'absolute'; a.style.top = 0; a.style.left = 0; a.style.border = 'none'; a.style.visibility = 'hidden'; document.body.appendChild(a); if ('loading' !== document.readyState) c(); else if (window.addEventListener) document.addEventListener('DOMContentLoaded', c); else { var e = document.onreadystatechange || function () { }; document.onreadystatechange = function (b) { e(b); 'loading' !== document.readyState && (document.onreadystatechange = e, c()) } } } })();</script>
+
+</body>
+
+</html>
