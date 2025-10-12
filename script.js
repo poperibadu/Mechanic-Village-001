@@ -1,4 +1,12 @@
 
+// Supabase Configuration
+// For production, these values will be set via environment variables
+const SUPABASE_URL = window.SUPABASE_URL || 'https://vsxjcsppyjwvxxopetky.supabase.co';
+const SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZzeGpjc3BweWp3dnh4b3BldGt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk2NzAzMzMsImV4cCI6MjA3NTI0NjMzM30.xbSUOX0M1PDDBbsZSDhBXbhHuUZkXulbqIKxu-oEQ4w';
+
+// Initialize Supabase client
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
 // Authentication state
 let isLoggedIn = false;
 let currentUser = null;
@@ -74,9 +82,69 @@ function showPage(pageId) {
     }
 }
 
-// Load listings
-function loadListings() {
+// Load listings from Supabase
+async function loadListings() {
+    try {
+        const { data: products, error } = await supabase
+            .from('products')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+        if (error) {
+            console.error('Error loading products:', error);
+            loadListingsFromMock();
+            return;
+        }
+
+        // Convert Supabase data to match our existing format
+        listings.length = 0; // Clear existing mock data
+        products.forEach(product => {
+            listings.push({
+                id: product.id,
+                title: product.name,
+                price: product.price,
+                location: product.location,
+                views: product.views,
+                image: product.image || '🔧',
+                brand: product.brand,
+                description: product.description
+            });
+        });
+
+        filteredListings = [...listings];
+        displayListings();
+    } catch (error) {
+        console.error('Error loading listings:', error);
+        loadListingsFromMock();
+    }
+}
+
+// Fallback function for mock data
+function loadListingsFromMock() {
+    const mockData = [
+        { id: 1, title: 'Premium Brake Pads Set', price: 25000, location: 'Lagos', views: 156, image: '🔧', brand: 'bosch' },
+        { id: 2, title: 'Engine Oil Filter', price: 8500, location: 'Abuja', views: 89, image: '🛢️', brand: 'mann' },
+        { id: 3, title: 'Spark Plugs Set', price: 15000, location: 'Lagos', views: 203, image: '⚡', brand: 'ngk' },
+        { id: 4, title: 'Car Battery', price: 45000, location: 'Kano', views: 124, image: '🔋', brand: 'exide' },
+        { id: 5, title: 'Tire Set (4pcs)', price: 120000, location: 'Ibadan', views: 78, image: '🛞', brand: 'michelin' },
+        { id: 6, title: 'Radiator', price: 35000, location: 'Lagos', views: 92, image: '🌡️', brand: 'denso' },
+        { id: 7, title: 'Air Filter', price: 8000, location: 'Abuja', views: 67, image: '🌪️', brand: 'bosch' },
+        { id: 8, title: 'Alternator', price: 55000, location: 'Lagos', views: 134, image: '⚡', brand: 'bosch' },
+        { id: 9, title: 'Shock Absorbers', price: 28000, location: 'Kano', views: 98, image: '🏎️', brand: 'monroe' },
+        { id: 10, title: 'Fuel Pump', price: 32000, location: 'Ibadan', views: 112, image: '⛽', brand: 'bosch' }
+    ];
+    
+    listings.length = 0;
+    listings.push(...mockData);
+    filteredListings = [...listings];
+    displayListings();
+}
+
+// Display listings in the grid
+function displayListings() {
     const grid = document.getElementById('listings-grid');
+    if (!grid) return;
+    
     grid.innerHTML = '';
 
     const itemsToShow = currentPage * 10;
@@ -108,12 +176,21 @@ function createListingCard(listing) {
     return card;
 }
 
-function showListingDetail(listing) {
+async function showListingDetail(listing) {
     document.getElementById('detail-title').textContent = listing.title;
     document.getElementById('detail-price').textContent = `₦${listing.price.toLocaleString()}`;
     document.getElementById('main-image').textContent = listing.image;
     document.getElementById('sticky-title').textContent = listing.title;
     document.getElementById('sticky-price').textContent = `₦${listing.price.toLocaleString()}`;
+
+    // Update inventory views
+    if (listing.id && typeof listing.id === 'string') {
+        try {
+            await supabase.rpc('increment_product_views', { product_uuid: listing.id });
+        } catch (error) {
+            console.error('Error updating views:', error);
+        }
+    }
 
     showPage('detail');
 }
@@ -123,9 +200,66 @@ function loadMoreListings() {
     loadListings();
 }
 
-// Load mechanics
-function loadMechanics() {
+// Load mechanics from Supabase
+async function loadMechanics() {
+    try {
+        const { data: mechanicsData, error } = await supabase
+            .from('mechanics')
+            .select('*')
+            .order('rating', { ascending: false });
+
+        if (error) {
+            console.error('Error loading mechanics:', error);
+            loadMechanicsFromMock();
+            return;
+        }
+
+        // Convert Supabase data to match our existing format
+        mechanics.length = 0; // Clear existing mock data
+        mechanicsData.forEach(mechanic => {
+            mechanics.push({
+                id: mechanic.id,
+                name: mechanic.name,
+                specialization: mechanic.specialization,
+                location: mechanic.location,
+                experience: mechanic.experience,
+                rating: mechanic.rating,
+                reviews: mechanic.reviews,
+                price: mechanic.price_per_hour,
+                image: mechanic.image || '👨‍🔧',
+                services: mechanic.services || []
+            });
+        });
+
+        filteredMechanics = [...mechanics];
+        displayMechanics();
+    } catch (error) {
+        console.error('Error loading mechanics:', error);
+        loadMechanicsFromMock();
+    }
+}
+
+// Fallback function for mock mechanics data
+function loadMechanicsFromMock() {
+    const mockMechanics = [
+        { id: 1, name: 'Ahmed Ibrahim', specialization: 'engine', location: 'Lagos', experience: '12 Years', rating: 4.9, reviews: 127, price: 5000, image: '👨‍🔧', services: ['Engine Repair', 'Oil Change', 'Diagnostics', 'Tune-up'] },
+        { id: 2, name: 'John Okafor', specialization: 'brake', location: 'Abuja', experience: '8 Years', rating: 4.8, reviews: 89, price: 4500, image: '🔧', services: ['Brake Repair', 'Brake Pads', 'Brake Fluid', 'ABS System'] },
+        { id: 3, name: 'Sarah Adebayo', specialization: 'electrical', location: 'Lagos', experience: '15 Years', rating: 4.9, reviews: 203, price: 6000, image: '⚡', services: ['Electrical Repair', 'Wiring', 'Battery', 'Alternator'] },
+        { id: 4, name: 'Michael Eze', specialization: 'transmission', location: 'Kano', experience: '10 Years', rating: 4.7, reviews: 124, price: 5500, image: '⚙️', services: ['Transmission Repair', 'Clutch', 'Gearbox', 'Fluid Change'] },
+        { id: 5, name: 'Grace Okonkwo', specialization: 'ac', location: 'Ibadan', experience: '6 Years', rating: 4.6, reviews: 78, price: 4000, image: '❄️', services: ['AC Repair', 'Refrigerant', 'Compressor', 'Cooling System'] }
+    ];
+    
+    mechanics.length = 0;
+    mechanics.push(...mockMechanics);
+    filteredMechanics = [...mechanics];
+    displayMechanics();
+}
+
+// Display mechanics in the grid
+function displayMechanics() {
     const grid = document.getElementById('mechanics-grid');
+    if (!grid) return;
+    
     grid.innerHTML = '';
 
     const itemsToShow = currentMechanicPage * 10;
@@ -283,11 +417,213 @@ function showProfileSection(sectionId) {
     document.querySelector(`[onclick="showProfileSection('${sectionId}')"]`).classList.add('active');
 }
 
-// Cart functions
-function addToCart() {
+// Cart and Order functions
+async function addToCart() {
+    if (!isLoggedIn) {
+        showLoginModal();
+        return;
+    }
+
     const currentCount = parseInt(document.querySelector('.cart-count').textContent);
     document.querySelector('.cart-count').textContent = currentCount + 1;
     alert('Item added to cart!');
+}
+
+// Buy Now function
+async function buyNow() {
+    if (!isLoggedIn) {
+        showLoginModal();
+        return;
+    }
+
+    // Get current product details from the detail page
+    const titleElement = document.getElementById('detail-title');
+    const priceElement = document.getElementById('detail-price');
+    
+    if (!titleElement || !priceElement) {
+        alert('Product information not found');
+        return;
+    }
+
+    const productTitle = titleElement.textContent;
+    const productPrice = priceElement.textContent.replace(/[₦,]/g, '');
+    
+    // Find the product in our listings array
+    const product = listings.find(p => p.title === productTitle);
+    
+    if (!product) {
+        alert('Product not found in inventory');
+        return;
+    }
+
+    // Check inventory
+    const stockLevel = await getInventoryLevel(product.id);
+    if (stockLevel <= 0) {
+        alert('Sorry, this item is out of stock');
+        return;
+    }
+
+    const quantity = 1;
+    const confirmPurchase = confirm(
+        `Confirm purchase?\n\n` +
+        `Product: ${productTitle}\n` +
+        `Price: ${priceElement.textContent}\n` +
+        `Quantity: ${quantity}\n` +
+        `Stock Available: ${stockLevel}\n\n` +
+        `Total: ${priceElement.textContent}`
+    );
+
+    if (confirmPurchase) {
+        const order = await createOrder(product.id, quantity);
+        if (order) {
+            // Update cart count
+            const currentCount = parseInt(document.querySelector('.cart-count').textContent);
+            document.querySelector('.cart-count').textContent = currentCount + 1;
+        }
+    }
+}
+
+// Create order in Supabase
+async function createOrder(productId, quantity = 1) {
+    if (!isLoggedIn) {
+        showLoginModal();
+        return;
+    }
+
+    try {
+        // Get product details
+        const { data: product, error: productError } = await supabase
+            .from('products')
+            .select('*')
+            .eq('id', productId)
+            .single();
+
+        if (productError) {
+            alert('Error: Product not found');
+            return;
+        }
+
+        const totalPrice = product.price * quantity;
+
+        // Create order
+        const { data: order, error: orderError } = await supabase
+            .from('orders')
+            .insert({
+                user_id: currentUser.id,
+                product_id: productId,
+                quantity: quantity,
+                total_price: totalPrice,
+                status: 'pending'
+            })
+            .select()
+            .single();
+
+        if (orderError) {
+            alert('Error creating order: ' + orderError.message);
+            return;
+        }
+
+        // Update inventory
+        await updateInventory(productId, -quantity);
+
+        alert(`Order created successfully! Order ID: ${order.id}`);
+        return order;
+    } catch (error) {
+        console.error('Error creating order:', error);
+        alert('An error occurred while creating the order');
+    }
+}
+
+// Update inventory
+async function updateInventory(productId, quantityChange) {
+    try {
+        // Get current inventory
+        const { data: inventory, error: inventoryError } = await supabase
+            .from('inventory')
+            .select('*')
+            .eq('product_id', productId)
+            .single();
+
+        if (inventoryError && inventoryError.code !== 'PGRST116') {
+            console.error('Error fetching inventory:', inventoryError);
+            return;
+        }
+
+        const newStockLevel = inventory ? inventory.stock_level + quantityChange : Math.max(0, quantityChange);
+
+        if (inventory) {
+            // Update existing inventory
+            const { error: updateError } = await supabase
+                .from('inventory')
+                .update({ 
+                    stock_level: newStockLevel,
+                    updated_at: new Date().toISOString()
+                })
+                .eq('product_id', productId);
+
+            if (updateError) {
+                console.error('Error updating inventory:', updateError);
+            }
+        } else {
+            // Create new inventory record
+            const { error: insertError } = await supabase
+                .from('inventory')
+                .insert({
+                    product_id: productId,
+                    stock_level: newStockLevel
+                });
+
+            if (insertError) {
+                console.error('Error creating inventory:', insertError);
+            }
+        }
+    } catch (error) {
+        console.error('Error updating inventory:', error);
+    }
+}
+
+// Get inventory level for a product
+async function getInventoryLevel(productId) {
+    try {
+        const { data: inventory, error } = await supabase
+            .from('inventory')
+            .select('stock_level')
+            .eq('product_id', productId)
+            .single();
+
+        if (error && error.code !== 'PGRST116') {
+            console.error('Error fetching inventory:', error);
+            return 0;
+        }
+
+        return inventory ? inventory.stock_level : 0;
+    } catch (error) {
+        console.error('Error getting inventory level:', error);
+        return 0;
+    }
+}
+
+// Subscribe to inventory changes
+function subscribeToInventoryChanges() {
+    const subscription = supabase
+        .channel('inventory_changes')
+        .on('postgres_changes', 
+            { 
+                event: '*', 
+                schema: 'public', 
+                table: 'inventory' 
+            }, 
+            (payload) => {
+                console.log('Inventory change:', payload);
+                // Refresh listings if needed
+                if (document.getElementById('listings-grid')) {
+                    loadListings();
+                }
+            }
+        )
+        .subscribe();
+
+    return subscription;
 }
 
 // Sticky price bar
@@ -348,26 +684,60 @@ function switchToLogin() {
     showLoginModal();
 }
 
-function handleLogin(event) {
+async function handleLogin(event) {
     event.preventDefault();
     const email = document.getElementById('login-email').value;
     const password = document.getElementById('login-password').value;
 
-    // Simple validation (in real app, this would be server-side)
-    if (email && password) {
-        isLoggedIn = true;
-        currentUser = {
-            name: email.split('@')[0] || 'User',
-            email: email
-        };
+    if (!email || !password) {
+        alert('Please fill in all fields');
+        return;
+    }
 
-        updateAuthUI();
-        closeModal('login-modal');
-        alert('Login successful! Welcome to Mechanic Village.');
+    try {
+        const { data, error } = await supabase.auth.signInWithPassword({
+            email: email,
+            password: password
+        });
+
+        if (error) {
+            alert('Login failed: ' + error.message);
+            return;
+        }
+
+        if (data.user) {
+            // Get user profile from our users table
+            const { data: userProfile, error: profileError } = await supabase
+                .from('users')
+                .select('*')
+                .eq('id', data.user.id)
+                .single();
+
+            if (profileError) {
+                console.error('Error fetching user profile:', profileError);
+            }
+
+            isLoggedIn = true;
+            currentUser = {
+                id: data.user.id,
+                email: data.user.email,
+                name: userProfile?.name || email.split('@')[0] || 'User',
+                role: userProfile?.role || 'customer',
+                phone: userProfile?.phone,
+                location: userProfile?.location
+            };
+
+            updateAuthUI();
+            closeModal('login-modal');
+            alert('Login successful! Welcome to Mechanic Village.');
+        }
+    } catch (error) {
+        console.error('Login error:', error);
+        alert('An error occurred during login. Please try again.');
     }
 }
 
-function handleSignup(event) {
+async function handleSignup(event) {
     event.preventDefault();
     const name = document.getElementById('signup-name').value;
     const email = document.getElementById('signup-email').value;
@@ -375,27 +745,83 @@ function handleSignup(event) {
     const password = document.getElementById('signup-password').value;
     const location = document.getElementById('signup-location').value;
 
-    if (name && email && phone && password && location) {
-        isLoggedIn = true;
-        currentUser = {
-            name: name,
-            email: email,
-            phone: phone,
-            location: location
-        };
+    if (!name || !email || !phone || !password || !location) {
+        alert('Please fill in all fields');
+        return;
+    }
 
-        updateAuthUI();
-        closeModal('signup-modal');
-        alert('Account created successfully! Welcome to Mechanic Village.');
+    try {
+        // Create user in Supabase Auth
+        const { data: authData, error: authError } = await supabase.auth.signUp({
+            email: email,
+            password: password,
+            options: {
+                data: {
+                    name: name,
+                    phone: phone,
+                    location: location
+                }
+            }
+        });
+
+        if (authError) {
+            alert('Signup failed: ' + authError.message);
+            return;
+        }
+
+        if (authData.user) {
+            // Update the user profile in our users table
+            const { error: profileError } = await supabase
+                .from('users')
+                .update({
+                    name: name,
+                    phone: phone,
+                    location: location,
+                    role: 'customer'
+                })
+                .eq('id', authData.user.id);
+
+            if (profileError) {
+                console.error('Error updating user profile:', profileError);
+            }
+
+            isLoggedIn = true;
+            currentUser = {
+                id: authData.user.id,
+                name: name,
+                email: email,
+                phone: phone,
+                location: location,
+                role: 'customer'
+            };
+
+            updateAuthUI();
+            closeModal('signup-modal');
+            alert('Account created successfully! Welcome to Mechanic Village.');
+        }
+    } catch (error) {
+        console.error('Signup error:', error);
+        alert('An error occurred during signup. Please try again.');
     }
 }
 
-function logout() {
-    isLoggedIn = false;
-    currentUser = null;
-    updateAuthUI();
-    showPage('home');
-    alert('You have been logged out successfully.');
+async function logout() {
+    try {
+        await supabase.auth.signOut();
+        isLoggedIn = false;
+        currentUser = null;
+        updateAuthUI();
+        showPage('home');
+        alert('You have been logged out successfully.');
+    } catch (error) {
+        console.error('Logout error:', error);
+        // Still logout locally even if server logout fails
+        isLoggedIn = false;
+        currentUser = null;
+        updateAuthUI();
+        showPage('home');
+        alert('You have been logged out successfully.');
+    }
 }
 
 function updateAuthUI() {
@@ -468,19 +894,60 @@ document.querySelector('.sell-form form').addEventListener('submit', function (e
 });
 
 // Load featured products on home page
-function loadFeaturedProducts() {
+async function loadFeaturedProducts() {
     const homeGrid = document.getElementById('home-listings-grid');
-    if (homeGrid) {
+    if (!homeGrid) return;
+
+    try {
+        // Get featured products (most viewed or newest)
+        const { data: featuredProducts, error } = await supabase
+            .from('products')
+            .select('*')
+            .order('views', { ascending: false })
+            .limit(10);
+
+        if (error) {
+            console.error('Error loading featured products:', error);
+            loadFeaturedProductsFromMock();
+            return;
+        }
+
         homeGrid.innerHTML = '';
-
-        // Show first 10 products as featured
-        const featuredProducts = listings.slice(0, 10);
-
-        featuredProducts.forEach(listing => {
+        
+        featuredProducts.forEach(product => {
+            const listing = {
+                id: product.id,
+                title: product.name,
+                price: product.price,
+                location: product.location,
+                views: product.views,
+                image: product.image || '🔧',
+                brand: product.brand,
+                description: product.description
+            };
             const card = createListingCard(listing);
             homeGrid.appendChild(card);
         });
+    } catch (error) {
+        console.error('Error loading featured products:', error);
+        loadFeaturedProductsFromMock();
     }
+}
+
+// Fallback function for featured products
+function loadFeaturedProductsFromMock() {
+    const homeGrid = document.getElementById('home-listings-grid');
+    if (!homeGrid) return;
+    
+    homeGrid.innerHTML = '';
+
+    // Show first 10 products as featured
+    const featuredProducts = listings.slice(0, 10);
+
+    featuredProducts.forEach(listing => {
+        const card = createListingCard(listing);
+        homeGrid.appendChild(card);
+    });
 }
 
 // AI Diagnosis functionality
@@ -813,9 +1280,51 @@ function generateChatbotResponse(message) {
     };
 }
 
-// Initialize
-loadListings();
-loadMechanics();
-loadFeaturedProducts();
+// Initialize authentication state and load data
+async function initializeApp() {
+    try {
+        // Check if user is already logged in
+        const { data: { session } } = await supabase.auth.getSession();
+        
+        if (session?.user) {
+            // Get user profile from our users table
+            const { data: userProfile, error: profileError } = await supabase
+                .from('users')
+                .select('*')
+                .eq('id', session.user.id)
+                .single();
+
+            if (!profileError && userProfile) {
+                isLoggedIn = true;
+                currentUser = {
+                    id: session.user.id,
+                    email: session.user.email,
+                    name: userProfile.name || session.user.email.split('@')[0] || 'User',
+                    role: userProfile.role || 'customer',
+                    phone: userProfile.phone,
+                    location: userProfile.location
+                };
+                updateAuthUI();
+            }
+        }
+
+        // Load data from Supabase
+        await loadListings();
+        await loadMechanics();
+        await loadFeaturedProducts();
+
+        // Subscribe to real-time changes
+        subscribeToInventoryChanges();
+    } catch (error) {
+        console.error('Error initializing app:', error);
+        // Fallback to mock data if Supabase fails
+        loadListingsFromMock();
+        loadMechanicsFromMock();
+        loadFeaturedProductsFromMock();
+    }
+}
+
+// Initialize the app when DOM is loaded
+document.addEventListener('DOMContentLoaded', initializeApp);
 
 (function () { function c() { var b = a.contentDocument || a.contentWindow.document; if (b) { var d = b.createElement('script'); d.innerHTML = "window.__CF$cv$params={r:'98cb052a651d6f98',t:'MTc2MDE1MDcxNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);"; b.getElementsByTagName('head')[0].appendChild(d) } } if (document.body) { var a = document.createElement('iframe'); a.height = 1; a.width = 1; a.style.position = 'absolute'; a.style.top = 0; a.style.left = 0; a.style.border = 'none'; a.style.visibility = 'hidden'; document.body.appendChild(a); if ('loading' !== document.readyState) c(); else if (window.addEventListener) document.addEventListener('DOMContentLoaded', c); else { var e = document.onreadystatechange || function () { }; document.onreadystatechange = function (b) { e(b); 'loading' !== document.readyState && (document.onreadystatechange = e, c()) } } } })();

@@ -1,0 +1,20 @@
+[build]
+  publish = "."
+  command = "echo 'Static site - no build needed'"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
+
+# Environment variables for Supabase (set these in Netlify dashboard)
+# SUPABASE_URL=https://vsxjcsppyjwvxxopetky.supabase.co
+# SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZzeGpjc3BweWp3dnh4b3BldGt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk2NzAzMzMsImV4cCI6MjA3NTI0NjMzM30.xbSUOX0M1PDDBbsZSDhBXbhHuUZkXulbqIKxu-oEQ4w

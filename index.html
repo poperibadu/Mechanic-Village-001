@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mechanic Village - Premium Auto Parts Marketplace</title>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <style>
         body {
             box-sizing: border-box;
@@ -2425,8 +2426,10 @@
                                 <button class="btn call-btn">📞 Call</button>
                             </div>
 
-                            <button class="btn btn-primary" style="width: 100%; margin-bottom: 1rem;"
-                                onclick="addToCart()">Add to Cart</button>
+                            <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+                                <button class="btn btn-primary" style="flex: 1;" onclick="addToCart()">Add to Cart</button>
+                                <button class="btn btn-outline" style="flex: 1;" onclick="buyNow()">Buy Now</button>
+                            </div>
 
                             <div class="share-buttons">
                                 <button class="share-btn">📱</button>
