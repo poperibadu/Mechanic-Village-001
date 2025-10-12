@@ -2,7 +2,7 @@
 // Supabase Configuration
 // For production, these values will be set via environment variables
 const SUPABASE_URL = window.SUPABASE_URL || 'https://vsxjcsppyjwvxxopetky.supabase.co';
-const SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZzeGpjc3BweWp3dnh4b3BldGt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk2NzAzMzMsImV4cCI6MjA3NTI0NjMzM30.xbSUOX0M1PDDBbsZSDhBXbhHuUZkXulbqIKxu-oEQ4w';
+const SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzII1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZzeGpjc3BweWp3dnh4b3BldGt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk2NzAzMzMsImV4cCI6MjA3NTI0NjMzM30.xbSUOX0M1PDDBbsZSDhBXbhHuUZkXulbqIKxu-oEQ4w';
 
 // Initialize Supabase client
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -133,7 +133,7 @@ function loadListingsFromMock() {
         { id: 9, title: 'Shock Absorbers', price: 28000, location: 'Kano', views: 98, image: '🏎️', brand: 'monroe' },
         { id: 10, title: 'Fuel Pump', price: 32000, location: 'Ibadan', views: 112, image: '⛽', brand: 'bosch' }
     ];
-    
+
     listings.length = 0;
     listings.push(...mockData);
     filteredListings = [...listings];
@@ -144,7 +144,7 @@ function loadListingsFromMock() {
 function displayListings() {
     const grid = document.getElementById('listings-grid');
     if (!grid) return;
-    
+
     grid.innerHTML = '';
 
     const itemsToShow = currentPage * 10;
@@ -248,7 +248,7 @@ function loadMechanicsFromMock() {
         { id: 4, name: 'Michael Eze', specialization: 'transmission', location: 'Kano', experience: '10 Years', rating: 4.7, reviews: 124, price: 5500, image: '⚙️', services: ['Transmission Repair', 'Clutch', 'Gearbox', 'Fluid Change'] },
         { id: 5, name: 'Grace Okonkwo', specialization: 'ac', location: 'Ibadan', experience: '6 Years', rating: 4.6, reviews: 78, price: 4000, image: '❄️', services: ['AC Repair', 'Refrigerant', 'Compressor', 'Cooling System'] }
     ];
-    
+
     mechanics.length = 0;
     mechanics.push(...mockMechanics);
     filteredMechanics = [...mechanics];
@@ -259,7 +259,7 @@ function loadMechanicsFromMock() {
 function displayMechanics() {
     const grid = document.getElementById('mechanics-grid');
     if (!grid) return;
-    
+
     grid.innerHTML = '';
 
     const itemsToShow = currentMechanicPage * 10;
@@ -353,9 +353,6 @@ function applyFilters() {
         case 'views':
             filteredListings.sort((a, b) => b.views - a.views);
             break;
-            case 'date':
-                filteredListings.sort((a, b) => b.id - a.id);
-                break;
         default:
             filteredListings.sort((a, b) => b.id - a.id);
     }
@@ -442,7 +439,7 @@ async function buyNow() {
     // Get current product details from the detail page
     const titleElement = document.getElementById('detail-title');
     const priceElement = document.getElementById('detail-price');
-    
+
     if (!titleElement || !priceElement) {
         alert('Product information not found');
         return;
@@ -450,10 +447,10 @@ async function buyNow() {
 
     const productTitle = titleElement.textContent;
     const productPrice = priceElement.textContent.replace(/[₦,]/g, '');
-    
+
     // Find the product in our listings array
     const product = listings.find(p => p.title === productTitle);
-    
+
     if (!product) {
         alert('Product not found in inventory');
         return;
@@ -558,7 +555,7 @@ async function updateInventory(productId, quantityChange) {
             // Update existing inventory
             const { error: updateError } = await supabase
                 .from('inventory')
-                .update({ 
+                .update({
                     stock_level: newStockLevel,
                     updated_at: new Date().toISOString()
                 })
@@ -610,12 +607,12 @@ async function getInventoryLevel(productId) {
 function subscribeToInventoryChanges() {
     const subscription = supabase
         .channel('inventory_changes')
-        .on('postgres_changes', 
-            { 
-                event: '*', 
-                schema: 'public', 
-                table: 'inventory' 
-            }, 
+        .on('postgres_changes',
+            {
+                event: '*',
+                schema: 'public',
+                table: 'inventory'
+            },
             (payload) => {
                 console.log('Inventory change:', payload);
                 // Refresh listings if needed
@@ -773,19 +770,20 @@ async function handleSignup(event) {
         }
 
         if (authData.user) {
-            // Update the user profile in our users table
+            // Create the user profile in our users table
             const { error: profileError } = await supabase
                 .from('users')
-                .update({
+                .insert({
+                    id: authData.user.id,
                     name: name,
+                    email: email,
                     phone: phone,
                     location: location,
                     role: 'customer'
-                })
-                .eq('id', authData.user.id);
+                });
 
             if (profileError) {
-                console.error('Error updating user profile:', profileError);
+                console.error('Error creating user profile:', profileError);
             }
 
             isLoggedIn = true;
@@ -916,7 +914,7 @@ async function loadFeaturedProducts() {
         }
 
         homeGrid.innerHTML = '';
-        
+
         featuredProducts.forEach(product => {
             const listing = {
                 id: product.id,
@@ -941,7 +939,7 @@ async function loadFeaturedProducts() {
 function loadFeaturedProductsFromMock() {
     const homeGrid = document.getElementById('home-listings-grid');
     if (!homeGrid) return;
-    
+
     homeGrid.innerHTML = '';
 
     // Show first 10 products as featured
@@ -1288,7 +1286,7 @@ async function initializeApp() {
     try {
         // Check if user is already logged in
         const { data: { session } } = await supabase.auth.getSession();
-        
+
         if (session?.user) {
             // Get user profile from our users table
             const { data: userProfile, error: profileError } = await supabase
