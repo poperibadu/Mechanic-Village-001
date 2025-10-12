@@ -353,6 +353,9 @@ function applyFilters() {
         case 'views':
             filteredListings.sort((a, b) => b.views - a.views);
             break;
+            case 'date':
+                filteredListings.sort((a, b) => b.id - a.id);
+                break;
         default:
             filteredListings.sort((a, b) => b.id - a.id);
     }
