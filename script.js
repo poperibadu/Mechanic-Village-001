@@ -784,6 +784,7 @@ async function handleSignup(event) {
 
             if (profileError) {
                 console.error('Error creating user profile:', profileError);
+                alert('Error creating profile: ' + profileError.message);
             }
 
             isLoggedIn = true;
