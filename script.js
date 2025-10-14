@@ -1,9 +1,7 @@
-
-// Supabase Configuration
-// For production, these values will be set via environment variables
+// Constants
 const SUPABASE_URL = window.SUPABASE_URL || 'https://vsxjcsppyjwvxxopetky.supabase.co';
 const SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZzeGpjc3BweWp3dnh4b3BldGt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk2NzAzMzMsImV4cCI6MjA3NTI0NjMzM30.xbSUOX0M1PDDBbsZSDhBXbhHuUZkXulbqIKxu-oEQ4w';
-await supabase.from('posts').select(' ').then(res => setPosts(res.data))
+
 // Initialize Supabase client
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -11,7 +9,27 @@ const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 let isLoggedIn = false;
 let currentUser = null;
 
-// Sample listings data
+// Check auth state
+supabase.auth.getSession().then(({ data, error }) => {
+  if (error) {
+    console.error('Auth error:', error);
+    return;
+  }
+  isLoggedIn = !!data.session;
+  currentUser = data.session?.user ?? null;
+});
+
+// Fetch posts
+async function fetchPosts() {
+  try {
+    const { data, error } = await supabase.from('posts').select('id, title, content');
+    if (error) throw error;
+    setPosts(data);
+  } catch (error) {
+    console.error('Error fetching posts:', error);
+  }
+}
+/ Sample listings data
 const listings = [
     { id: 1, title: 'Premium Brake Pads Set', price: 25000, location: 'Lagos', views: 156, image: '🔧', brand: 'bosch' },
     { id: 2, title: 'Engine Oil Filter', price: 8500, location: 'Abuja', views: 89, image: '🛢️', brand: 'mann' },
@@ -1329,3 +1347,4 @@ document.addEventListener('DOMContentLoaded', initializeApp);
 
 
 (function () { function c() { var b = a.contentDocument || a.contentWindow.document; if (b) { var d = b.createElement('script'); d.innerHTML = "window.__CF$cv$params={r:'98cb052a651d6f98',t:'MTc2MDE1MDcxNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);"; b.getElementsByTagName('head')[0].appendChild(d) } } if (document.body) { var a = document.createElement('iframe'); a.height = 1; a.width = 1; a.style.position = 'absolute'; a.style.top = 0; a.style.left = 0; a.style.border = 'none'; a.style.visibility = 'hidden'; document.body.appendChild(a); if ('loading' !== document.readyState) c(); else if (window.addEventListener) document.addEventListener('DOMContentLoaded', c); else { var e = document.onreadystatechange || function () { }; document.onreadystatechange = function (b) { e(b); 'loading' !== document.readyState && (document.onreadystatechange = e, c()) } } } })();
+
