@@ -45,8 +45,19 @@ auth.onAuthStateChanged(async (user) => {
   updateAuthUI();
 });
 
-// Listings data will be fetched from Firestore
-const listings = [];
+// Sample listings data
+const listings = [
+    { id: 1, title: 'Premium Brake Pads Set', price: 25000, location: 'Lagos', views: 156, image: '🔧', brand: 'bosch' },
+    { id: 2, title: 'Engine Oil Filter', price: 8500, location: 'Abuja', views: 89, image: '🛢️', brand: 'mann' },
+    { id: 3, title: 'Spark Plugs Set', price: 15000, location: 'Lagos', views: 203, image: '⚡', brand: 'ngk' },
+    { id: 4, title: 'Car Battery', price: 45000, location: 'Kano', views: 124, image: '🔋', brand: 'exide' },
+    { id: 5, title: 'Tire Set (4pcs)', price: 120000, location: 'Ibadan', views: 78, image: '🛞', brand: 'michelin' },
+    { id: 6, title: 'Radiator', price: 35000, location: 'Lagos', views: 92, image: '🌡️', brand: 'denso' },
+    { id: 7, title: 'Air Filter', price: 8000, location: 'Abuja', views: 67, image: '🌪️', brand: 'bosch' },
+    { id: 8, title: 'Alternator', price: 55000, location: 'Lagos', views: 134, image: '⚡', brand: 'bosch' },
+    { id: 9, title: 'Shock Absorbers', price: 28000, location: 'Kano', views: 98, image: '🏎️', brand: 'monroe' },
+    { id: 10, title: 'Fuel Pump', price: 32000, location: 'Ibadan', views: 112, image: '⛽', brand: 'bosch' }
+];
 
 // Sample mechanics data
 const mechanics = [
@@ -64,7 +75,6 @@ const mechanics = [
 
 let currentPage = 1;
 let filteredListings = [...listings];
-let currentProductId = null;
 let currentMechanicPage = 1;
 let filteredMechanics = [...mechanics];
 
@@ -134,10 +144,30 @@ async function loadListings() {
         displayListings();
     } catch (error) {
         console.error('Error loading listings:', error);
+        loadListingsFromMock();
     }
 }
 
-// The loadListingsFromMock function is no longer needed.
+// Fallback function for mock data
+function loadListingsFromMock() {
+    const mockData = [
+        { id: 1, title: 'Premium Brake Pads Set', price: 25000, location: 'Lagos', views: 156, image: '🔧', brand: 'bosch' },
+        { id: 2, title: 'Engine Oil Filter', price: 8500, location: 'Abuja', views: 89, image: '🛢️', brand: 'mann' },
+        { id: 3, title: 'Spark Plugs Set', price: 15000, location: 'Lagos', views: 203, image: '⚡', brand: 'ngk' },
+        { id: 4, title: 'Car Battery', price: 45000, location: 'Kano', views: 124, image: '🔋', brand: 'exide' },
+        { id: 5, title: 'Tire Set (4pcs)', price: 120000, location: 'Ibadan', views: 78, image: '🛞', brand: 'michelin' },
+        { id: 6, title: 'Radiator', price: 35000, location: 'Lagos', views: 92, image: '🌡️', brand: 'denso' },
+        { id: 7, title: 'Air Filter', price: 8000, location: 'Abuja', views: 67, image: '🌪️', brand: 'bosch' },
+        { id: 8, title: 'Alternator', price: 55000, location: 'Lagos', views: 134, image: '⚡', brand: 'bosch' },
+        { id: 9, title: 'Shock Absorbers', price: 28000, location: 'Kano', views: 98, image: '🏎️', brand: 'monroe' },
+        { id: 10, title: 'Fuel Pump', price: 32000, location: 'Ibadan', views: 112, image: '⛽', brand: 'bosch' }
+    ];
+
+    listings.length = 0;
+    listings.push(...mockData);
+    filteredListings = [...listings];
+    displayListings();
+}
 
 // Display listings in the grid
 function displayListings() {
@@ -176,7 +206,6 @@ function createListingCard(listing) {
 }
 
 async function showListingDetail(listing) {
-    currentProductId = listing.id;
     document.getElementById('detail-title').textContent = listing.title;
     document.getElementById('detail-price').textContent = `₦${listing.price.toLocaleString()}`;
     document.getElementById('main-image').textContent = listing.image;
@@ -206,7 +235,7 @@ function loadMoreListings() {
 // Load mechanics from Firestore
 async function loadMechanics() {
     try {
-        const mechanicsSnapshot = await db.collection('mechanics').orderBy('rating', 'desc').get();
+        const mechanicsSnapshot = await db.collection('users').where('role', '==', 'mechanic').get();
         mechanics.length = 0; // Clear existing mock data
         mechanicsSnapshot.forEach(doc => {
             const mechanic = doc.data();
@@ -228,25 +257,10 @@ async function loadMechanics() {
         displayMechanics();
     } catch (error) {
         console.error('Error loading mechanics:', error);
-        loadMechanicsFromMock();
     }
 }
 
-// Fallback function for mock mechanics data
-function loadMechanicsFromMock() {
-    const mockMechanics = [
-        { id: 1, name: 'Ahmed Ibrahim', specialization: 'engine', location: 'Lagos', experience: '12 Years', rating: 4.9, reviews: 127, price: 5000, image: '👨‍🔧', services: ['Engine Repair', 'Oil Change', 'Diagnostics', 'Tune-up'] },
-        { id: 2, name: 'John Okafor', specialization: 'brake', location: 'Abuja', experience: '8 Years', rating: 4.8, reviews: 89, price: 4500, image: '🔧', services: ['Brake Repair', 'Brake Pads', 'Brake Fluid', 'ABS System'] },
-        { id: 3, name: 'Sarah Adebayo', specialization: 'electrical', location: 'Lagos', experience: '15 Years', rating: 4.9, reviews: 203, price: 6000, image: '⚡', services: ['Electrical Repair', 'Wiring', 'Battery', 'Alternator'] },
-        { id: 4, name: 'Michael Eze', specialization: 'transmission', location: 'Kano', experience: '10 Years', rating: 4.7, reviews: 124, price: 5500, image: '⚙️', services: ['Transmission Repair', 'Clutch', 'Gearbox', 'Fluid Change'] },
-        { id: 5, name: 'Grace Okonkwo', specialization: 'ac', location: 'Ibadan', experience: '6 Years', rating: 4.6, reviews: 78, price: 4000, image: '❄️', services: ['AC Repair', 'Refrigerant', 'Compressor', 'Cooling System'] }
-    ];
-
-    mechanics.length = 0;
-    mechanics.push(...mockMechanics);
-    filteredMechanics = [...mechanics];
-    displayMechanics();
-}
+// The loadMechanicsFromMock function is no longer needed.
 
 // Display mechanics in the grid
 function displayMechanics() {
@@ -417,17 +431,6 @@ async function addToCart() {
         return;
     }
 
-    if (!currentProductId) {
-        alert('Could not identify the product. Please try again.');
-        return;
-    }
-
-    const stockLevel = await getInventoryLevel(currentProductId);
-    if (stockLevel <= 0) {
-        alert('Sorry, this item is out of stock and cannot be added to the cart.');
-        return;
-    }
-
     const currentCount = parseInt(document.querySelector('.cart-count').textContent);
     document.querySelector('.cart-count').textContent = currentCount + 1;
     alert('Item added to cart!');
@@ -440,52 +443,50 @@ async function buyNow() {
         return;
     }
 
-    if (!currentProductId) {
-        alert('Could not identify the product. Please try again.');
+    // Get current product details from the detail page
+    const titleElement = document.getElementById('detail-title');
+    const priceElement = document.getElementById('detail-price');
+
+    if (!titleElement || !priceElement) {
+        alert('Product information not found');
         return;
     }
 
-    const stockLevel = await getInventoryLevel(currentProductId);
+    const productTitle = titleElement.textContent;
+    const productPrice = priceElement.textContent.replace(/[₦,]/g, '');
+
+    // Find the product in our listings array
+    const product = listings.find(p => p.title === productTitle);
+
+    if (!product) {
+        alert('Product not found in inventory');
+        return;
+    }
+
+    // Check inventory
+    const stockLevel = await getInventoryLevel(product.id);
     if (stockLevel <= 0) {
-        alert('Sorry, this item is out of stock.');
+        alert('Sorry, this item is out of stock');
         return;
     }
 
-    const product = listings.find(p => p.id === currentProductId);
     const quantity = 1;
     const confirmPurchase = confirm(
         `Confirm purchase?\n\n` +
-        `Product: ${product.title}\n` +
-        `Price: ₦${product.price.toLocaleString()}\n` +
+        `Product: ${productTitle}\n` +
+        `Price: ${priceElement.textContent}\n` +
         `Quantity: ${quantity}\n` +
         `Stock Available: ${stockLevel}\n\n` +
-        `Total: ₦${product.price.toLocaleString()}`
+        `Total: ${priceElement.textContent}`
     );
 
     if (confirmPurchase) {
-        const order = await createOrder(currentProductId, quantity);
+        const order = await createOrder(product.id, quantity);
         if (order) {
             // Update cart count
             const currentCount = parseInt(document.querySelector('.cart-count').textContent);
             document.querySelector('.cart-count').textContent = currentCount + 1;
         }
-    }
-}
-
-// Get inventory level for a product
-async function getInventoryLevel(productId) {
-    try {
-        const inventoryRef = db.collection('inventory').doc(productId);
-        const inventoryDoc = await inventoryRef.get();
-
-        if (!inventoryDoc.exists) {
-            return 0;
-        }
-
-        return inventoryDoc.data().stock_level;
-    } catch (error) {
-        console.error('Error getting inventory level:', error);
-        return 0;
     }
 }
 
@@ -496,48 +497,56 @@ async function createOrder(productId, quantity = 1) {
         return;
     }
 
-    const productRef = db.collection('products').doc(productId);
-    const inventoryRef = db.collection('inventory').doc(productId);
-
     try {
-        const newOrderRef = await db.runTransaction(async (transaction) => {
-            const productDoc = await transaction.get(productRef);
-            if (!productDoc.exists) {
-                throw "Product not found";
-            }
+        // Get product details
+        const productRef = db.collection('products').doc(productId);
+        const productDoc = await productRef.get();
 
-            const inventoryDoc = await transaction.get(inventoryRef);
-            if (!inventoryDoc.exists || inventoryDoc.data().stock_level < quantity) {
-                throw "Sorry, this item is out of stock";
-            }
+        if (!productDoc.exists) {
+            alert('Error: Product not found');
+            return;
+        }
 
-            // Decrement stock
-            const newStock = inventoryDoc.data().stock_level - quantity;
-            transaction.update(inventoryRef, { stock_level: newStock, updatedAt: firebase.firestore.FieldValue.serverTimestamp() });
+        const product = productDoc.data();
+        const totalPrice = product.price * quantity;
 
-            // Create order
-            const product = productDoc.data();
-            const totalPrice = product.price * quantity;
-            const orderRef = db.collection('orders').doc();
-
-            transaction.set(orderRef, {
-                userId: currentUser.uid,
-                productId: productId,
-                quantity: quantity,
-                totalPrice: totalPrice,
-                status: 'pending',
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            });
-
-            return orderRef;
+        // Create order
+        const orderRef = await db.collection('orders').add({
+            userId: currentUser.uid,
+            productId: productId,
+            quantity: quantity,
+            totalPrice: totalPrice,
+            status: 'pending',
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
         });
 
-        alert(`Order created successfully! Order ID: ${newOrderRef.id}`);
-        return { id: newOrderRef.id };
+        // Update inventory
+        await updateInventory(productId, -quantity);
+
+        alert(`Order created successfully! Order ID: ${orderRef.id}`);
+        return { id: orderRef.id };
     } catch (error) {
         console.error('Error creating order:', error);
-        alert(`An error occurred while creating the order: ${error}`);
-        return null;
+        alert('An error occurred while creating the order');
+    }
+}
+
+// Update inventory
+async function updateInventory(productId, quantityChange) {
+    try {
+        const inventoryRef = db.collection('inventory').doc(productId);
+
+        await db.runTransaction(async (transaction) => {
+            const inventoryDoc = await transaction.get(inventoryRef);
+            if (!inventoryDoc.exists) {
+                transaction.set(inventoryRef, { stock_level: Math.max(0, quantityChange), updatedAt: firebase.firestore.FieldValue.serverTimestamp() });
+            } else {
+                const newStockLevel = inventoryDoc.data().stock_level + quantityChange;
+                transaction.update(inventoryRef, { stock_level: newStockLevel, updatedAt: firebase.firestore.FieldValue.serverTimestamp() });
+            }
+        });
+    } catch (error) {
+        console.error('Error updating inventory:', error);
     }
 }
 
@@ -639,7 +648,14 @@ async function handleLogin(event) {
     }
 
     try {
-        await auth.signInWithEmailAndPassword(email, password);
+        const userCredential = await auth.signInWithEmailAndPassword(email, password);
+        const user = userCredential.user;
+        const userProfile = await db.collection('users').doc(user.uid).get();
+
+        isLoggedIn = true;
+        currentUser = { uid: user.uid, email: user.email, ...userProfile.data() };
+        updateAuthUI();
+
         alert('Login successful! Welcome to Mechanic Village.');
         closeModal('login-modal');
     } catch (error) {
@@ -663,14 +679,31 @@ async function handleSignup(event) {
     try {
         const userCredential = await auth.createUserWithEmailAndPassword(email, password);
         const user = userCredential.user;
+        const role = document.getElementById('signup-role').value;
 
-        // Add user profile to Firestore
-        await db.collection('users').doc(user.uid).set({
+        const userProfile = {
             name: name,
             phone: phone,
             location: location,
-            role: 'customer'
-        });
+            role: role
+        };
+
+        if (role === 'mechanic') {
+            userProfile.specialization = '';
+            userProfile.experience = '';
+            userProfile.price_per_hour = 0;
+            userProfile.rating = 0;
+            userProfile.reviews = 0;
+            userProfile.services = [];
+        }
+
+        // Add user profile to Firestore
+        await db.collection('users').doc(user.uid).set(userProfile);
+
+        // Manually update UI after signup
+        isLoggedIn = true;
+        currentUser = { uid: user.uid, email: user.email, ...userProfile };
+        updateAuthUI();
 
         closeModal('signup-modal');
         alert('Account created successfully! Welcome to Mechanic Village.');
@@ -693,6 +726,7 @@ function updateAuthUI() {
     const guestButtons = document.getElementById('auth-buttons-guest');
     const userButtons = document.getElementById('auth-buttons-user');
     const userName = document.getElementById('user-name');
+    const mechanicProfileEditor = document.getElementById('mechanic-profile-editor');
 
     // Navigation elements
     const navListings = document.getElementById('nav-listings');
@@ -715,6 +749,15 @@ function updateAuthUI() {
         document.getElementById('mobile-nav-mechanics').style.display = 'block';
         mobileNavProfile.style.display = 'block';
         mobileNavCart.style.display = 'block';
+
+        if (currentUser.role === 'mechanic') {
+            mechanicProfileEditor.style.display = 'block';
+            document.getElementById('mechanic-specialization').value = currentUser.specialization || '';
+            document.getElementById('mechanic-experience').value = currentUser.experience || '';
+            document.getElementById('mechanic-price').value = currentUser.price_per_hour || '';
+            document.getElementById('mechanic-services').value = (currentUser.services || []).join(', ');
+        }
+
     } else {
         // Show guest buttons, hide user buttons
         guestButtons.style.display = 'flex';
@@ -753,47 +796,37 @@ document.querySelector('.hero-search-input').addEventListener('keypress', functi
 });
 
 // Form submissions
-document.querySelector('.sell-form form').addEventListener('submit', async function (e) {
+document.getElementById('mechanic-profile-editor').querySelector('form').addEventListener('submit', async function (e) {
     e.preventDefault();
-    if (!isLoggedIn) {
-        showLoginModal();
+    if (!isLoggedIn || currentUser.role !== 'mechanic') {
         return;
     }
 
-    const title = document.querySelector('.sell-form input[placeholder="e.g., Premium Brake Pads Set"]').value;
-    const price = parseInt(document.querySelector('.sell-form input[placeholder="25000"]').value);
-    const quantity = parseInt(document.getElementById('sell-stock-quantity').value);
-    const vendorId = document.getElementById('vendor-select').value;
-    const vendor = vendors.find(v => v.id == vendorId);
-
-    if (!title || !price || !quantity || !vendorId) {
-        alert('Please fill in all fields');
-        return;
-    }
+    const specialization = document.getElementById('mechanic-specialization').value;
+    const experience = document.getElementById('mechanic-experience').value;
+    const price = parseInt(document.getElementById('mechanic-price').value);
+    const services = document.getElementById('mechanic-services').value.split(',').map(s => s.trim());
 
     try {
-        // Add product to 'products' collection
-        const productRef = await db.collection('products').add({
-            title: title,
-            price: price,
-            sellerId: currentUser.uid,
-            vendor: vendor.name,
-            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-            views: 0
+        await db.collection('users').doc(currentUser.uid).update({
+            specialization: specialization,
+            experience: experience,
+            price_per_hour: price,
+            services: services
         });
-
-        // Add inventory to 'inventory' collection
-        await db.collection('inventory').doc(productRef.id).set({
-            stock_level: quantity,
-            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-        });
-
-        alert('Product listed successfully!');
-        showPage('listings');
+        alert('Mechanic profile updated successfully!');
     } catch (error) {
-        console.error('Error listing product:', error);
-        alert('An error occurred while listing the product.');
+        console.error('Error updating mechanic profile:', error);
+        alert('An error occurred while updating your profile.');
     }
+});
+
+document.querySelector('.sell-form form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const vendorId = document.getElementById('vendor-select').value;
+    const vendor = vendors.find(v => v.id == vendorId);
+    vendor.products++;
+    alert(`Product listed for ${vendor.name}! They now have ${vendor.products} products.`);
 });
 
 // Load featured products on home page

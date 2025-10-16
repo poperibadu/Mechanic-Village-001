@@ -730,6 +730,29 @@
                             </table>
                         </div>
 
+                        <div id="mechanic-profile-editor" class="profile-section" style="display: none;">
+                            <h2>Edit Mechanic Profile</h2>
+                            <form class="sell-form" style="margin: 0; background: transparent; padding: 0;">
+                                <div class="form-group">
+                                    <label>Specialization</label>
+                                    <input type="text" id="mechanic-specialization" placeholder="e.g., Engine Specialist">
+                                </div>
+                                <div class="form-group">
+                                    <label>Years of Experience</label>
+                                    <input type="number" id="mechanic-experience" placeholder="e.g., 10">
+                                </div>
+                                <div class="form-group">
+                                    <label>Price Per Hour (₦)</label>
+                                    <input type="number" id="mechanic-price" placeholder="e.g., 5000">
+                                </div>
+                                <div class="form-group">
+                                    <label>Services Offered (comma-separated)</label>
+                                    <input type="text" id="mechanic-services" placeholder="e.g., Oil Change, Brake Repair">
+                                </div>
+                                <button type="submit" class="btn btn-primary">Update Mechanic Profile</button>
+                            </form>
+                        </div>
+
                         <div id="profile-settings" class="profile-section" style="display: none;">
                             <h2>Account Settings</h2>
                             <form class="sell-form" style="margin: 0; background: transparent; padding: 0;">
@@ -862,11 +885,6 @@
                             <select id="vendor-select">
                                 <!-- Options will be populated by JavaScript -->
                             </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Stock Quantity</label>
-                            <input type="number" placeholder="10" id="sell-stock-quantity">
                         </div>
 
                         <div class="form-group">
@@ -1364,6 +1382,14 @@
                     <label>Password</label>
                     <input type="password" id="signup-password" required="">
                 </div>
+                <div class="form-group">
+                    <label>Role</label>
+                    <select id="signup-role" required="">
+                        <option value="customer">Customer</option>
+                        <option value="mechanic">Mechanic</option>
+                    </select>
+                </div>
+
                 <div class="form-group">
                     <label>Location</label>
                     <select id="signup-location" required="">
