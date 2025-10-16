@@ -365,7 +365,7 @@ function applyFilters() {
     }
 
     currentPage = 1;
-    loadListings();
+    displayListings();
 }
 
 function applyMechanicFilters() {
@@ -406,7 +406,7 @@ function applyMechanicFilters() {
     }
 
     currentMechanicPage = 1;
-    loadMechanics();
+    displayMechanics();
 }
 
 // Profile sections
