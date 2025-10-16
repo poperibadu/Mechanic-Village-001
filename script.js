@@ -107,6 +107,11 @@ function showPage(pageId) {
         loadMechanics();
     }
 
+    // Load vendors if showing vendors page
+    if (pageId === 'vendors') {
+        loadVendors();
+    }
+
     // Handle sticky nav
     if (pageId === 'detail') {
         window.addEventListener('scroll', handleStickyPrice);
@@ -186,7 +191,7 @@ function createListingCard(listing) {
     card.onclick = () => showListingDetail(listing);
 
     card.innerHTML = `
-                <div class="listing-image">
+                <div class="listing-image" loading="lazy">
                     ${listing.image}
                     <div class="listing-views">${listing.views} views</div>
                 </div>
@@ -296,7 +301,7 @@ function createMechanicCard(mechanic) {
     const stars = '⭐'.repeat(Math.floor(mechanic.rating));
 
     card.innerHTML = `
-                <div class="listing-image">
+                <div class="listing-image" loading="lazy">
                     ${mechanic.image}
                     <div class="listing-views">${mechanic.reviews} reviews</div>
                 </div>
@@ -659,8 +664,8 @@ async function handleLogin(event) {
 
     try {
         await auth.signInWithEmailAndPassword(email, password);
-        closeModal('login-modal');
         alert('Login successful! Welcome to Mechanic Village.');
+        closeModal('login-modal');
     } catch (error) {
         alert('Login failed: ' + error.message);
     }
@@ -774,7 +779,10 @@ document.querySelector('.hero-search-input').addEventListener('keypress', functi
 // Form submissions
 document.querySelector('.sell-form form').addEventListener('submit', function (e) {
     e.preventDefault();
-    alert('Listing submitted successfully! It will be reviewed and published shortly.');
+    const vendorId = document.getElementById('vendor-select').value;
+    const vendor = vendors.find(v => v.id == vendorId);
+    vendor.products++;
+    alert(`Product listed for ${vendor.name}! They now have ${vendor.products} products.`);
 });
 
 // Load featured products on home page
@@ -1153,10 +1161,93 @@ function generateChatbotResponse(message) {
     };
 }
 
+// Sample vendors data
+const vendors = [
+    { id: 1, name: 'Adekunle Auto Parts', location: 'Lagos', products: 15, avatar: 'A' },
+    { id: 2, name: 'Bisi Motors', location: 'Abuja', products: 25, avatar: 'B' },
+    { id: 3, name: 'Chinedu Spare Parts', location: 'Kano', products: 10, avatar: 'C' },
+    { id: 4, name: 'Danjuma Enterprises', location: 'Ibadan', products: 30, avatar: 'D' }
+];
+
+// Load vendors
+function loadVendors() {
+    const grid = document.getElementById('vendors-grid');
+    if (!grid) return;
+
+    grid.innerHTML = '';
+
+    vendors.forEach(vendor => {
+        const card = createVendorCard(vendor);
+        grid.appendChild(card);
+    });
+}
+
+function createVendorCard(vendor) {
+    const card = document.createElement('div');
+    card.className = 'vendor-card';
+
+    card.innerHTML = `
+        <div class="vendor-avatar">${vendor.avatar}</div>
+        <div class="vendor-name">${vendor.name}</div>
+        <div class="vendor-location">📍 ${vendor.location}</div>
+        <div class="vendor-products">${vendor.products} products</div>
+    `;
+
+    return card;
+}
+
 // Initialize the app when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    loadListings();
-    loadMechanics();
-    loadFeaturedProducts();
-    subscribeToInventoryChanges();
+    if (typeof loadListings === 'function') {
+        loadListings();
+    } else {
+        loadListingsFromMock();
+    }
+    if (typeof loadMechanics === 'function') {
+        loadMechanics();
+    } else {
+        loadMechanicsFromMock();
+    }
+    if (typeof loadFeaturedProducts === 'function') {
+        loadFeaturedProducts();
+    } else {
+        loadFeaturedProductsFromMock();
+    }
+    if (typeof subscribeToInventoryChanges === 'function') {
+        subscribeToInventoryChanges();
+    }
+    loadVendors();
+    populateVendorSelect();
 });
+
+// Populate vendor select dropdown
+function populateVendorSelect() {
+    const select = document.getElementById('vendor-select');
+    if (!select) return;
+
+    vendors.forEach(vendor => {
+        const option = document.createElement('option');
+        option.value = vendor.id;
+        option.textContent = vendor.name;
+        select.appendChild(option);
+    });
+}
+
+// Message Modal
+function showMessageModal() {
+    if (!isLoggedIn) {
+        showLoginModal();
+        return;
+    }
+    document.getElementById('message-modal').classList.add('active');
+}
+
+function handleMessageSend(event) {
+    event.preventDefault();
+    const message = document.getElementById('message-text').value;
+    if (message) {
+        alert('Message sent successfully!');
+        closeModal('message-modal');
+        document.getElementById('message-text').value = '';
+    }
+}
