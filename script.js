@@ -481,12 +481,7 @@ async function buyNow() {
     );
 
     if (confirmPurchase) {
-        const order = await createOrder(product.id, quantity);
-        if (order) {
-            // Update cart count
-            const currentCount = parseInt(document.querySelector('.cart-count').textContent);
-            document.querySelector('.cart-count').textContent = currentCount + 1;
-        }
+        await createOrder(product.id, quantity);
     }
 }
 
