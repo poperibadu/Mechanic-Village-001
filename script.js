@@ -235,7 +235,7 @@ function loadMoreListings() {
 // Load mechanics from Firestore
 async function loadMechanics() {
     try {
-        const mechanicsSnapshot = await db.collection('mechanics').orderBy('rating', 'desc').get();
+        const mechanicsSnapshot = await db.collection('users').where('role', '==', 'mechanic').get();
         mechanics.length = 0; // Clear existing mock data
         mechanicsSnapshot.forEach(doc => {
             const mechanic = doc.data();
@@ -257,25 +257,10 @@ async function loadMechanics() {
         displayMechanics();
     } catch (error) {
         console.error('Error loading mechanics:', error);
-        loadMechanicsFromMock();
     }
 }
 
-// Fallback function for mock mechanics data
-function loadMechanicsFromMock() {
-    const mockMechanics = [
-        { id: 1, name: 'Ahmed Ibrahim', specialization: 'engine', location: 'Lagos', experience: '12 Years', rating: 4.9, reviews: 127, price: 5000, image: '👨‍🔧', services: ['Engine Repair', 'Oil Change', 'Diagnostics', 'Tune-up'] },
-        { id: 2, name: 'John Okafor', specialization: 'brake', location: 'Abuja', experience: '8 Years', rating: 4.8, reviews: 89, price: 4500, image: '🔧', services: ['Brake Repair', 'Brake Pads', 'Brake Fluid', 'ABS System'] },
-        { id: 3, name: 'Sarah Adebayo', specialization: 'electrical', location: 'Lagos', experience: '15 Years', rating: 4.9, reviews: 203, price: 6000, image: '⚡', services: ['Electrical Repair', 'Wiring', 'Battery', 'Alternator'] },
-        { id: 4, name: 'Michael Eze', specialization: 'transmission', location: 'Kano', experience: '10 Years', rating: 4.7, reviews: 124, price: 5500, image: '⚙️', services: ['Transmission Repair', 'Clutch', 'Gearbox', 'Fluid Change'] },
-        { id: 5, name: 'Grace Okonkwo', specialization: 'ac', location: 'Ibadan', experience: '6 Years', rating: 4.6, reviews: 78, price: 4000, image: '❄️', services: ['AC Repair', 'Refrigerant', 'Compressor', 'Cooling System'] }
-    ];
-
-    mechanics.length = 0;
-    mechanics.push(...mockMechanics);
-    filteredMechanics = [...mechanics];
-    displayMechanics();
-}
+// The loadMechanicsFromMock function is no longer needed.
 
 // Display mechanics in the grid
 function displayMechanics() {
@@ -663,7 +648,14 @@ async function handleLogin(event) {
     }
 
     try {
-        await auth.signInWithEmailAndPassword(email, password);
+        const userCredential = await auth.signInWithEmailAndPassword(email, password);
+        const user = userCredential.user;
+        const userProfile = await db.collection('users').doc(user.uid).get();
+
+        isLoggedIn = true;
+        currentUser = { uid: user.uid, email: user.email, ...userProfile.data() };
+        updateAuthUI();
+
         alert('Login successful! Welcome to Mechanic Village.');
         closeModal('login-modal');
     } catch (error) {
@@ -687,14 +679,31 @@ async function handleSignup(event) {
     try {
         const userCredential = await auth.createUserWithEmailAndPassword(email, password);
         const user = userCredential.user;
+        const role = document.getElementById('signup-role').value;
 
-        // Add user profile to Firestore
-        await db.collection('users').doc(user.uid).set({
+        const userProfile = {
             name: name,
             phone: phone,
             location: location,
-            role: 'customer'
-        });
+            role: role
+        };
+
+        if (role === 'mechanic') {
+            userProfile.specialization = '';
+            userProfile.experience = '';
+            userProfile.price_per_hour = 0;
+            userProfile.rating = 0;
+            userProfile.reviews = 0;
+            userProfile.services = [];
+        }
+
+        // Add user profile to Firestore
+        await db.collection('users').doc(user.uid).set(userProfile);
+
+        // Manually update UI after signup
+        isLoggedIn = true;
+        currentUser = { uid: user.uid, email: user.email, ...userProfile };
+        updateAuthUI();
 
         closeModal('signup-modal');
         alert('Account created successfully! Welcome to Mechanic Village.');
@@ -717,6 +726,7 @@ function updateAuthUI() {
     const guestButtons = document.getElementById('auth-buttons-guest');
     const userButtons = document.getElementById('auth-buttons-user');
     const userName = document.getElementById('user-name');
+    const mechanicProfileEditor = document.getElementById('mechanic-profile-editor');
 
     // Navigation elements
     const navListings = document.getElementById('nav-listings');
@@ -739,6 +749,15 @@ function updateAuthUI() {
         document.getElementById('mobile-nav-mechanics').style.display = 'block';
         mobileNavProfile.style.display = 'block';
         mobileNavCart.style.display = 'block';
+
+        if (currentUser.role === 'mechanic') {
+            mechanicProfileEditor.style.display = 'block';
+            document.getElementById('mechanic-specialization').value = currentUser.specialization || '';
+            document.getElementById('mechanic-experience').value = currentUser.experience || '';
+            document.getElementById('mechanic-price').value = currentUser.price_per_hour || '';
+            document.getElementById('mechanic-services').value = (currentUser.services || []).join(', ');
+        }
+
     } else {
         // Show guest buttons, hide user buttons
         guestButtons.style.display = 'flex';
@@ -777,6 +796,31 @@ document.querySelector('.hero-search-input').addEventListener('keypress', functi
 });
 
 // Form submissions
+document.getElementById('mechanic-profile-editor').querySelector('form').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    if (!isLoggedIn || currentUser.role !== 'mechanic') {
+        return;
+    }
+
+    const specialization = document.getElementById('mechanic-specialization').value;
+    const experience = document.getElementById('mechanic-experience').value;
+    const price = parseInt(document.getElementById('mechanic-price').value);
+    const services = document.getElementById('mechanic-services').value.split(',').map(s => s.trim());
+
+    try {
+        await db.collection('users').doc(currentUser.uid).update({
+            specialization: specialization,
+            experience: experience,
+            price_per_hour: price,
+            services: services
+        });
+        alert('Mechanic profile updated successfully!');
+    } catch (error) {
+        console.error('Error updating mechanic profile:', error);
+        alert('An error occurred while updating your profile.');
+    }
+});
+
 document.querySelector('.sell-form form').addEventListener('submit', function (e) {
     e.preventDefault();
     const vendorId = document.getElementById('vendor-select').value;
