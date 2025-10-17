@@ -54,9 +54,9 @@ The Firebase project configuration is already included in the `script.js` file. 
 ```javascript
 // Firebase configuration in script.js
 const firebaseConfig = {
-  apiKey: "AIzaSyBftANZjTsEOoGmHaDwJb9JwXhHQK8j6KY",
-  authDomain: "mechanic-db779.firebaseapp.com",
-  projectId: "mechanic-db779",
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_AUTH_DOMAIN",
+  projectId: "YOUR_PROJECT_ID",
   // ... and other keys
 };
 ```
