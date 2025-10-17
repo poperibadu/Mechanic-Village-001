@@ -79,7 +79,7 @@ let currentMechanicPage = 1;
 let filteredMechanics = [...mechanics];
 
 // Navigation
-function showPage(pageId) {
+function showPage(pageId, options = {}) {
     // Hide all pages
     document.querySelectorAll('.page-section').forEach(section => {
         section.classList.remove('active');
@@ -98,7 +98,7 @@ function showPage(pageId) {
     });
 
     // Load listings if showing listings page
-    if (pageId === 'listings') {
+    if (pageId === 'listings' && !options.skipLoad) {
         loadListings();
     }
 
@@ -778,8 +778,10 @@ document.querySelector('.hero-search-btn').addEventListener('click', function ()
             listing.title.toLowerCase().includes(searchTerm.toLowerCase())
         );
         currentPage = 1;
-        showPage('listings');
-        loadListings();
+        showPage('listings', {
+            skipLoad: true
+        });
+        displayListings();
     }
 });
 
