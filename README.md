@@ -1,154 +1,85 @@
-# Mechanic Village - Auto Parts Marketplace
+# Mechanic Village - Premium Auto Parts Marketplace
 
-A modern, responsive marketplace for automotive parts and services built with HTML, CSS, JavaScript, and Supabase.
+Mechanic Village is a modern, responsive single-page application (SPA) designed as a marketplace for automotive parts and services. It is built with vanilla HTML, CSS, and JavaScript, and powered by Google Firebase for its backend services.
 
-## Features
+## ✨ Features
 
-- **User Authentication**: Email/password signup and login with Supabase Auth
-- **Product Listings**: Browse automotive parts with real-time inventory tracking
-- **Mechanic Directory**: Find qualified mechanics by specialization and location
-- **Order Management**: Create orders with real-time inventory updates
-- **AI Diagnosis**: Smart car problem diagnosis with part recommendations
-- **Real-time Updates**: Live inventory changes and notifications
-- **Responsive Design**: Works on desktop, tablet, and mobile devices
+-   **User Authentication**: Secure signup and login for customers and mechanics using Firebase Authentication.
+-   **Dynamic Product Listings**: Browse, search, and filter a wide range of auto parts.
+-   **Mechanic Directory**: Find and view profiles of qualified mechanics, filterable by specialization, location, and experience.
+-   **AI-Powered Diagnosis**: An intelligent tool on the homepage to help users diagnose car problems and get part recommendations.
+-   **Real-time Inventory**: The application reflects inventory levels in real-time, leveraging Firestore for data storage.
+-   **Direct Purchase Flow**: A streamlined "Buy Now" feature for quick and easy transactions.
+-   **User Profiles**: Dedicated profile pages for users to manage their account information and view purchase history.
+-   **Responsive Design**: A clean UI that works seamlessly across desktops, tablets, and mobile devices.
+-   **Customer Support Chatbot**: An integrated chatbot to assist users with common questions.
 
-## Tech Stack
+## 🛠️ Tech Stack
 
-- **Frontend**: HTML5, CSS3, JavaScript (ES6+)
-- **Backend**: Supabase (PostgreSQL + Auth + Real-time)
-- **Deployment**: Netlify (ready for deployment)
+-   **Frontend**: HTML5, CSS3, Vanilla JavaScript (ES6+)
+-   **Backend**: Google Firebase
+    -   **Firestore**: For database and real-time data synchronization.
+    -   **Firebase Authentication**: For user management.
+    -   **Firebase Hosting**: For deployment.
 
-## Database Schema
+## 🚀 Getting Started
 
-### Tables Created:
-- `users` - User profiles (extends Supabase auth.users)
-- `products` - Auto parts inventory
-- `orders` - Order management
-- `inventory` - Real-time stock tracking
-- `mechanics` - Mechanic profiles and services
+### Prerequisites
 
-### Row Level Security (RLS):
-- Anonymous users can view products and mechanics
-- Authenticated users can create orders and update profiles
-- Admins have full access to all data
+-   A modern web browser that supports JavaScript.
+-   A local web server to run the project (due to browser security policies with `file://` URLs). Python's built-in HTTP server is a great option.
 
-## Setup Instructions
+### Running Locally
 
-### 1. Supabase Setup
-The database schema is already configured with:
-- ✅ User authentication tables
-- ✅ Product catalog tables
-- ✅ Order management system
-- ✅ Inventory tracking
-- ✅ Row Level Security policies
-- ✅ Sample data inserted
+1.  **Clone the repository:**
+    ```bash
+    git clone <repository-url>
+    cd <repository-directory>
+    ```
 
-### 2. Environment Variables
-For production deployment, set these environment variables in Netlify:
+2.  **Start a local web server:**
+    If you have Python 3 installed, you can run the following command from the project's root directory:
+    ```bash
+    python -m http.server
+    ```
+    This will start a server, typically on `http://localhost:8000`.
 
+3.  **Open the application:**
+    Open your web browser and navigate to `http://localhost:8000`. The application should now be running.
+
+## 🔧 Firebase Configuration
+
+The Firebase project configuration is already included in the `script.js` file. The application is connected to a live Firebase project (`mechanic-db779`) and requires no additional setup for the frontend to function.
+
+```javascript
+// Firebase configuration in script.js
+const firebaseConfig = {
+  apiKey: "AIzaSyBftANZjTsEOoGmHaDwJb9JwXhHQK8j6KY",
+  authDomain: "mechanic-db779.firebaseapp.com",
+  projectId: "mechanic-db779",
+  // ... and other keys
+};
 ```
-SUPABASE_URL=https://vsxjcsppyjwvxxopetky.supabase.co
-SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZzeGpjc3BweWp3dnh4b3BldGt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk2NzAzMzMsImV4cCI6MjA3NTI0NjMzM30.xbSUOX0M1PDDBbsZSDhBXbhHuUZkXulbqIKxu-oEQ4w
-```
 
-### 3. Deployment to Netlify
+## ☁️ Deployment
 
-1. **Connect Repository**: Link your GitHub repository to Netlify
-2. **Build Settings**: 
-   - Build command: `echo 'Static site - no build needed'`
-   - Publish directory: `.` (root)
-3. **Environment Variables**: Add the Supabase credentials above
-4. **Deploy**: Click deploy - your site will be live!
+This project is configured for deployment with **Firebase Hosting**.
 
-## Sample Data
+1.  **Install the Firebase CLI:**
+    If you don't have it installed, follow the official instructions to install the [Firebase Command Line Interface](https://firebase.google.com/docs/cli).
 
-The database includes sample data:
-- 10 automotive products (brake pads, filters, batteries, etc.)
-- Inventory levels for each product
-- Ready-to-test order functionality
+2.  **Login to Firebase:**
+    ```bash
+    firebase login
+    ```
 
-## Key Features Implemented
+3.  **Deploy the site:**
+    Run the following command from the project's root directory:
+    ```bash
+    firebase deploy --only hosting
+    ```
+    After the command completes, the Firebase CLI will provide you with the URL for your live site.
 
-### Authentication
-- ✅ User registration with profile creation
-- ✅ Secure login/logout
-- ✅ Session persistence
-- ✅ Profile management
-
-### Product Management
-- ✅ Real-time product loading from Supabase
-- ✅ Product search and filtering
-- ✅ View tracking and analytics
-- ✅ Inventory level checking
-
-### Order System
-- ✅ Create orders with user authentication
-- ✅ Real-time inventory updates
-- ✅ Order status tracking
-- ✅ Stock level validation
-
-### Real-time Features
-- ✅ Inventory change subscriptions
-- ✅ Live data updates
-- ✅ Real-time notifications
-
-## Testing the Application
-
-1. **Sign Up**: Create a new account
-2. **Browse Products**: View the automotive parts catalog
-3. **Test Orders**: Try the "Buy Now" functionality
-4. **Check Inventory**: Verify real-time stock updates
-5. **AI Diagnosis**: Use the car problem diagnosis feature
-
-## API Endpoints Used
-
-- `POST /auth/v1/signup` - User registration
-- `POST /auth/v1/token` - User login
-- `GET /rest/v1/products` - Fetch products
-- `GET /rest/v1/mechanics` - Fetch mechanics
-- `POST /rest/v1/orders` - Create orders
-- `PUT /rest/v1/inventory` - Update inventory
-- `GET /rest/v1/inventory` - Check stock levels
-
-## Security Features
-
-- Row Level Security (RLS) enabled on all tables
-- JWT-based authentication
-- Secure API endpoints
-- Input validation and sanitization
-- CORS protection
-
-## Browser Support
-
-- Chrome 60+
-- Firefox 60+
-- Safari 12+
-- Edge 79+
-
-## Performance Optimizations
-
-- Lazy loading of images
-- Efficient database queries
-- Real-time subscriptions only when needed
-- Responsive image optimization
-- Minimal JavaScript bundle
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
-
-## License
+## 📄 License
 
 This project is licensed under the MIT License.
-
-## Support
-
-For support, email support@mechanicvillage.ng or create an issue in the repository.
-
----
-
-**Ready for Production Deployment** 🚀
