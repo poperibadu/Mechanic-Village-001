@@ -722,6 +722,7 @@ function updateAuthUI() {
     const userButtons = document.getElementById('auth-buttons-user');
     const userName = document.getElementById('user-name');
     const mechanicProfileEditor = document.getElementById('mechanic-profile-editor');
+    const mechanicProfileLink = document.getElementById('profile-mechanic-link');
 
     // Navigation elements
     const navListings = document.getElementById('nav-listings');
@@ -746,11 +747,13 @@ function updateAuthUI() {
         mobileNavCart.style.display = 'block';
 
         if (currentUser.role === 'mechanic') {
-            mechanicProfileEditor.style.display = 'block';
+            mechanicProfileLink.style.display = 'block'; // Show the link in the menu
             document.getElementById('mechanic-specialization').value = currentUser.specialization || '';
             document.getElementById('mechanic-experience').value = currentUser.experience || '';
             document.getElementById('mechanic-price').value = currentUser.price_per_hour || '';
             document.getElementById('mechanic-services').value = (currentUser.services || []).join(', ');
+        } else {
+            mechanicProfileLink.style.display = 'none';
         }
 
     } else {
@@ -766,6 +769,7 @@ function updateAuthUI() {
         document.getElementById('mobile-nav-mechanics').style.display = 'none';
         mobileNavProfile.style.display = 'none';
         mobileNavCart.style.display = 'none';
+        if(mechanicProfileLink) mechanicProfileLink.style.display = 'none'; // Hide the link on logout
     }
 }
 
@@ -1237,6 +1241,12 @@ function createVendorCard(vendor) {
 
 // Initialize the app when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
+    // Handle hash-based routing on page load
+    if (window.location.hash) {
+        const pageId = window.location.hash.substring(1);
+        showPage(pageId);
+    }
+
     if (typeof loadListings === 'function') {
         loadListings();
     } else {
