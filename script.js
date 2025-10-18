@@ -20,29 +20,37 @@ let currentUser = null;
 
 // Check auth state
 auth.onAuthStateChanged(async (user) => {
-  if (user) {
-    // User is signed in.
-    isLoggedIn = true;
-    const userProfile = await db.collection('users').doc(user.uid).get();
-    if (userProfile.exists) {
-      currentUser = {
-        uid: user.uid,
-        email: user.email,
-        ...userProfile.data()
-      };
-    } else {
-        currentUser = {
-            uid: user.uid,
-            email: user.email,
-            name: user.email.split('@')[0] || 'User'
+    try {
+        if (user) {
+            // User is signed in.
+            isLoggedIn = true;
+            const userProfile = await db.collection('users').doc(user.uid).get();
+            if (userProfile.exists) {
+                currentUser = {
+                    uid: user.uid,
+                    email: user.email,
+                    ...userProfile.data()
+                };
+            } else {
+                // Fallback to displayName from Auth if Firestore doc is not ready
+                currentUser = {
+                    uid: user.uid,
+                    email: user.email,
+                    name: user.displayName || user.email.split('@')[0] || 'User'
+                }
+            }
+        } else {
+            // User is signed out.
+            isLoggedIn = false;
+            currentUser = null;
         }
+    } catch (error) {
+        console.error("Error in onAuthStateChanged:", error);
+        isLoggedIn = false;
+        currentUser = null;
+    } finally {
+        updateAuthUI();
     }
-  } else {
-    // User is signed out.
-    isLoggedIn = false;
-    currentUser = null;
-  }
-  updateAuthUI();
 });
 
 // Sample listings data
@@ -643,14 +651,8 @@ async function handleLogin(event) {
     }
 
     try {
-        const userCredential = await auth.signInWithEmailAndPassword(email, password);
-        const user = userCredential.user;
-        const userProfile = await db.collection('users').doc(user.uid).get();
-
-        isLoggedIn = true;
-        currentUser = { uid: user.uid, email: user.email, ...userProfile.data() };
-        updateAuthUI();
-
+        await auth.signInWithEmailAndPassword(email, password);
+        // The onAuthStateChanged listener will handle the UI update
         alert('Login successful! Welcome to Mechanic Village.');
         closeModal('login-modal');
     } catch (error) {
@@ -676,6 +678,11 @@ async function handleSignup(event) {
         const user = userCredential.user;
         const role = document.getElementById('signup-role').value;
 
+        // Update the user's profile in Firebase Auth
+        await user.updateProfile({
+            displayName: name
+        });
+
         const userProfile = {
             name: name,
             phone: phone,
@@ -695,11 +702,7 @@ async function handleSignup(event) {
         // Add user profile to Firestore
         await db.collection('users').doc(user.uid).set(userProfile);
 
-        // Manually update UI after signup
-        isLoggedIn = true;
-        currentUser = { uid: user.uid, email: user.email, ...userProfile };
-        updateAuthUI();
-
+        // onAuthStateChanged will handle the UI update
         closeModal('signup-modal');
         alert('Account created successfully! Welcome to Mechanic Village.');
     } catch (error) {
