@@ -235,7 +235,7 @@ function loadMoreListings() {
 // Load mechanics from Firestore
 async function loadMechanics() {
     try {
-        const mechanicsSnapshot = await db.collection('users').where('role', '==', 'mechanic').get();
+        const mechanicsSnapshot = await db.collection('users').where('role', '==', 'mechanic').where('price_per_hour', '>', 0).get();
         mechanics.length = 0; // Clear existing mock data
         mechanicsSnapshot.forEach(doc => {
             const mechanic = doc.data();
