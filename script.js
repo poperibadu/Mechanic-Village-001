@@ -770,6 +770,14 @@ function updateAuthUI() {
         mobileNavProfile.style.display = 'none';
         mobileNavCart.style.display = 'none';
     }
+
+    // Adjust chatbot position on mobile
+    const chatbotContainer = document.querySelector('.chatbot-container');
+    if (window.innerWidth <= 768) {
+        chatbotContainer.classList.add('chatbot-container-mobile');
+    } else {
+        chatbotContainer.classList.remove('chatbot-container-mobile');
+    }
 }
 
 // Hero search functionality
