@@ -46,38 +46,14 @@ auth.onAuthStateChanged(async (user) => {
   updateAuthUI();
 });
 
-// Sample listings data
-const listings = [
-    { id: 1, title: 'Premium Brake Pads Set', price: 25000, location: 'Lagos', views: 156, image: '🔧', brand: 'bosch' },
-    { id: 2, title: 'Engine Oil Filter', price: 8500, location: 'Abuja', views: 89, image: '🛢️', brand: 'mann' },
-    { id: 3, title: 'Spark Plugs Set', price: 15000, location: 'Lagos', views: 203, image: '⚡', brand: 'ngk' },
-    { id: 4, title: 'Car Battery', price: 45000, location: 'Kano', views: 124, image: '🔋', brand: 'exide' },
-    { id: 5, title: 'Tire Set (4pcs)', price: 120000, location: 'Ibadan', views: 78, image: '🛞', brand: 'michelin' },
-    { id: 6, title: 'Radiator', price: 35000, location: 'Lagos', views: 92, image: '🌡️', brand: 'denso' },
-    { id: 7, title: 'Air Filter', price: 8000, location: 'Abuja', views: 67, image: '🌪️', brand: 'bosch' },
-    { id: 8, title: 'Alternator', price: 55000, location: 'Lagos', views: 134, image: '⚡', brand: 'bosch' },
-    { id: 9, title: 'Shock Absorbers', price: 28000, location: 'Kano', views: 98, image: '🏎️', brand: 'monroe' },
-    { id: 10, title: 'Fuel Pump', price: 32000, location: 'Ibadan', views: 112, image: '⛽', brand: 'bosch' }
-];
-
-// Sample mechanics data
-const mechanics = [
-    { id: 1, name: 'Ahmed Ibrahim', specialization: 'engine', location: 'Lagos', experience: '12 Years', rating: 4.9, reviews: 127, price: 5000, image: '👨‍🔧', services: ['Engine Repair', 'Oil Change', 'Diagnostics', 'Tune-up'] },
-    { id: 2, name: 'John Okafor', specialization: 'brake', location: 'Abuja', experience: '8 Years', rating: 4.8, reviews: 89, price: 4500, image: '🔧', services: ['Brake Repair', 'Brake Pads', 'Brake Fluid', 'ABS System'] },
-    { id: 3, name: 'Sarah Adebayo', specialization: 'electrical', location: 'Lagos', experience: '15 Years', rating: 4.9, reviews: 203, price: 6000, image: '⚡', services: ['Electrical Repair', 'Wiring', 'Battery', 'Alternator'] },
-    { id: 4, name: 'Michael Eze', specialization: 'transmission', location: 'Kano', experience: '10 Years', rating: 4.7, reviews: 124, price: 5500, image: '⚙️', services: ['Transmission Repair', 'Clutch', 'Gearbox', 'Fluid Change'] },
-    { id: 5, name: 'Grace Okonkwo', specialization: 'ac', location: 'Ibadan', experience: '6 Years', rating: 4.6, reviews: 78, price: 4000, image: '❄️', services: ['AC Repair', 'Refrigerant', 'Compressor', 'Cooling System'] },
-    { id: 6, name: 'David Adamu', specialization: 'general', location: 'Lagos', experience: '20 Years', rating: 4.8, reviews: 156, price: 4500, image: '🔧', services: ['General Repair', 'Maintenance', 'Inspection', 'Tune-up'] },
-    { id: 7, name: 'Fatima Yusuf', specialization: 'engine', location: 'Abuja', experience: '9 Years', rating: 4.7, reviews: 92, price: 5200, image: '🛠️', services: ['Engine Diagnostics', 'Repair', 'Overhaul', 'Performance'] },
-    { id: 8, name: 'Peter Okwu', specialization: 'brake', location: 'Lagos', experience: '11 Years', rating: 4.9, reviews: 134, price: 4800, image: '🚗', services: ['Brake System', 'Safety Check', 'Disc Replacement', 'Hydraulics'] },
-    { id: 9, name: 'Aisha Mohammed', specialization: 'electrical', location: 'Kano', experience: '7 Years', rating: 4.5, reviews: 98, price: 4200, image: '🔌', services: ['Auto Electrical', 'Lighting', 'Sensors', 'ECU'] },
-    { id: 10, name: 'Emmanuel Obi', specialization: 'general', location: 'Ibadan', experience: '14 Years', rating: 4.8, reviews: 112, price: 4700, image: '👨‍🔧', services: ['Full Service', 'Maintenance', 'Repairs', 'Diagnostics'] }
-];
+// Initialize data arrays
+let listings = [];
+let mechanics = [];
 
 let currentPage = 1;
-let filteredListings = [...listings];
+let filteredListings = [];
 let currentMechanicPage = 1;
-let filteredMechanics = [...mechanics];
+let filteredMechanics = [];
 
 // Navigation
 function showPage(pageId, options = {}) {
@@ -144,31 +120,9 @@ async function loadListings() {
         displayListings();
     } catch (error) {
         console.error('Error loading listings:', error);
-        // We can keep the mock data as a fallback if Firestore fails
-        loadListingsFromMock();
     }
 }
 
-// Fallback function for mock data
-function loadListingsFromMock() {
-    const mockData = [
-        { id: 1, title: 'Premium Brake Pads Set', price: 25000, location: 'Lagos', views: 156, image: '🔧', brand: 'bosch' },
-        { id: 2, title: 'Engine Oil Filter', price: 8500, location: 'Abuja', views: 89, image: '🛢️', brand: 'mann' },
-        { id: 3, title: 'Spark Plugs Set', price: 15000, location: 'Lagos', views: 203, image: '⚡', brand: 'ngk' },
-        { id: 4, title: 'Car Battery', price: 45000, location: 'Kano', views: 124, image: '🔋', brand: 'exide' },
-        { id: 5, title: 'Tire Set (4pcs)', price: 120000, location: 'Ibadan', views: 78, image: '🛞', brand: 'michelin' },
-        { id: 6, title: 'Radiator', price: 35000, location: 'Lagos', views: 92, image: '🌡️', brand: 'denso' },
-        { id: 7, title: 'Air Filter', price: 8000, location: 'Abuja', views: 67, image: '🌪️', brand: 'bosch' },
-        { id: 8, title: 'Alternator', price: 55000, location: 'Lagos', views: 134, image: '⚡', brand: 'bosch' },
-        { id: 9, title: 'Shock Absorbers', price: 28000, location: 'Kano', views: 98, image: '🏎️', brand: 'monroe' },
-        { id: 10, title: 'Fuel Pump', price: 32000, location: 'Ibadan', views: 112, image: '⛽', brand: 'bosch' }
-    ];
-
-    listings.length = 0;
-    listings.push(...mockData);
-    filteredListings = [...listings];
-    displayListings();
-}
 
 // Display listings in the grid
 function displayListings() {
@@ -216,7 +170,7 @@ async function showListingDetail(listing) {
     // Update inventory views
     if (listing.id) {
         try {
-            const productRef = db.collection('products').doc(listing.id);
+            const productRef = db.collection('inventory').doc(listing.id);
             await productRef.update({
                 views: firebase.firestore.FieldValue.increment(1)
             });
@@ -864,25 +818,9 @@ async function loadFeaturedProducts() {
         });
     } catch (error) {
         console.error('Error loading featured products:', error);
-        loadFeaturedProductsFromMock();
     }
 }
 
-// Fallback function for featured products
-function loadFeaturedProductsFromMock() {
-    const homeGrid = document.getElementById('home-listings-grid');
-    if (!homeGrid) return;
-
-    homeGrid.innerHTML = '';
-
-    // Show first 10 products as featured
-    const featuredProducts = listings.slice(0, 10);
-
-    featuredProducts.forEach(listing => {
-        const card = createListingCard(listing);
-        homeGrid.appendChild(card);
-    });
-}
 
 // AI Diagnosis functionality
 function runAIDiagnosis() {
