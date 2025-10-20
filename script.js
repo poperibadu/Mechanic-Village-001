@@ -216,7 +216,7 @@ async function showListingDetail(listing) {
     // Update inventory views
     if (listing.id) {
         try {
-            const productRef = db.collection('products').doc(listing.id);
+            const productRef = db.collection('inventory').doc(String(listing.id));
             await productRef.update({
                 views: firebase.firestore.FieldValue.increment(1)
             });
