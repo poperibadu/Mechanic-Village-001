@@ -25,17 +25,18 @@ auth.onAuthStateChanged(async (user) => {
     isLoggedIn = true;
     const userProfile = await db.collection('users').doc(user.uid).get();
     if (userProfile.exists) {
-      currentUser = {
-        uid: user.uid,
-        email: user.email,
-        ...userProfile.data()
-      };
-    } else {
         currentUser = {
             uid: user.uid,
             email: user.email,
-            name: user.email.split('@')[0] || 'User'
-        }
+            ...userProfile.data()
+        };
+    } else {
+        // Fallback for new users before Firestore write completes
+        currentUser = {
+            uid: user.uid,
+            email: user.email,
+            name: user.displayName || user.email.split('@')[0] || 'User'
+        };
     }
   } else {
     // User is signed out.
@@ -124,19 +125,18 @@ function showPage(pageId, options = {}) {
 // Load listings from Firestore
 async function loadListings() {
     try {
-        const productsSnapshot = await db.collection('products').orderBy('createdAt', 'desc').get();
+        const inventorySnapshot = await db.collection('inventory').orderBy('createdAt', 'desc').get();
         listings.length = 0; // Clear existing mock data
-        productsSnapshot.forEach(doc => {
-            const product = doc.data();
+        inventorySnapshot.forEach(doc => {
+            const item = doc.data();
             listings.push({
                 id: doc.id,
-                title: product.name,
-                price: product.price,
-                location: product.location,
-                views: product.views,
-                image: product.image || '🔧',
-                brand: product.brand,
-                description: product.description
+                title: item.name,
+                price: item.price,
+                location: item.location,
+                views: item.views,
+                image: item.image || '📦',
+                description: item.description
             });
         });
 
@@ -144,6 +144,7 @@ async function loadListings() {
         displayListings();
     } catch (error) {
         console.error('Error loading listings:', error);
+        // We can keep the mock data as a fallback if Firestore fails
         loadListingsFromMock();
     }
 }
@@ -660,21 +661,31 @@ async function handleLogin(event) {
 
 async function handleSignup(event) {
     event.preventDefault();
+    console.log('handleSignup called');
     const name = document.getElementById('signup-name').value;
     const email = document.getElementById('signup-email').value;
     const phone = document.getElementById('signup-phone').value;
     const password = document.getElementById('signup-password').value;
     const location = document.getElementById('signup-location').value;
 
+    console.log('Signup form values:', { name, email, phone, location });
+
     if (!name || !email || !phone || !password || !location) {
+        console.error('Validation failed: A field is empty');
         alert('Please fill in all fields');
         return;
     }
 
     try {
+        console.log('Calling createUserWithEmailAndPassword...');
         const userCredential = await auth.createUserWithEmailAndPassword(email, password);
         const user = userCredential.user;
         const role = document.getElementById('signup-role').value;
+
+        // Update Firebase Auth profile
+        await user.updateProfile({
+            displayName: name
+        });
 
         const userProfile = {
             name: name,
@@ -751,6 +762,7 @@ function updateAuthUI() {
             document.getElementById('mechanic-experience').value = currentUser.experience || '';
             document.getElementById('mechanic-price').value = currentUser.price_per_hour || '';
             document.getElementById('mechanic-services').value = (currentUser.services || []).join(', ');
+            document.getElementById('create-listing-btn').style.display = 'block';
         }
 
     } else {
@@ -1292,3 +1304,46 @@ function handleMessageSend(event) {
         document.getElementById('message-text').value = '';
     }
 }
+
+// Mobile menu toggle
+document.querySelector('.mobile-menu-toggle').addEventListener('click', () => {
+    document.querySelector('.mobile-nav').classList.toggle('active');
+});
+
+// Create Listing Form Submission
+document.getElementById('create-listing-form').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (!isLoggedIn) {
+        showLoginModal();
+        return;
+    }
+
+    const name = document.getElementById('listing-name').value;
+    const description = document.getElementById('listing-description').value;
+    const price = parseFloat(document.getElementById('listing-price').value);
+
+    if (!name || !description || !price) {
+        alert('Please fill in all fields.');
+        return;
+    }
+
+    try {
+        await db.collection('inventory').add({
+            name: name,
+            description: description,
+            price: price,
+            sellerId: currentUser.uid,
+            location: currentUser.location || 'Unknown',
+            views: 0,
+            image: '📦', // Default image
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        alert('Listing created successfully!');
+        document.getElementById('create-listing-form').reset();
+        showPage('profile');
+    } catch (error) {
+        console.error('Error creating listing:', error);
+        alert('Failed to create listing. Please try again.');
+    }
+});

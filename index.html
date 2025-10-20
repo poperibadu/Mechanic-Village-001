@@ -39,6 +39,8 @@
                     <span class="cart-count">3</span>
                 </button>
 
+                <button class="mobile-menu-toggle">☰</button>
+
                 <!-- Guest buttons -->
                 <div id="auth-buttons-guest" style="display: flex; gap: 1rem;">
                     <a href="#" class="btn btn-outline" onclick="showLoginModal()">Login</a>
@@ -59,9 +61,7 @@
     <!-- Mobile Navigation -->
     <nav class="mobile-nav">
         <ul class="mobile-nav-menu">
-            <li><a href="#" onclick="showPage('home')" class="mobile-nav-link active">
-                    🏠<br>Home
-                </a></li>
+            <li><a href="#" onclick="showPage('home')" class="mobile-nav-link active">Home</a></li>
             <li id="mobile-nav-listings" style="display: none;"><a href="#" onclick="checkAuthAndNavigate('listings')"
                     class="mobile-nav-link">
                     🔧<br>Parts
@@ -106,17 +106,13 @@
                     <p>Buy and sell genuine spare parts with our community of trusted sellers</p>
 
                     <!-- Hero Search Bar -->
-                    <div class="hero-search-container" style="max-width: 600px; margin: 2rem auto; position: relative;">
+                    <div class="hero-search-container">
                         <input type="text" class="hero-search-input"
-                            placeholder="Search for brake pads, filters, batteries..."
-                            style="width: 100%; padding: 1rem 1.5rem; border: 2px solid rgba(255,255,255,0.2); border-radius: 50px; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); color: white; font-size: 1.1rem; outline: none; transition: all 0.3s ease;">
-                        <button class="hero-search-btn"
-                            style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: linear-gradient(135deg, #dc2626, #b91c1c); border: none; border-radius: 40px; padding: 0.8rem 1.5rem; color: white; cursor: pointer; font-size: 1rem; font-weight: 600; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);">🔍
-                            Search</button>
+                            placeholder="Search for brake pads, filters, batteries...">
+                        <button class="hero-search-btn">🔍 Search</button>
                     </div>
 
-                    <button class="btn btn-primary" onclick="showPage('listings')"
-                        style="font-size: 1.1rem; padding: 1rem 2rem; margin-top: 1rem;">Browse All Parts</button>
+                    <button class="btn btn-primary hero-browse-btn" onclick="showPage('listings')">Browse All Parts</button>
                 </div>
             </div>
 
@@ -685,7 +681,10 @@
 
                     <div class="profile-content">
                         <div id="profile-listings" class="profile-section active">
-                            <h2>My Listings</h2>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                                <h2>My Listings</h2>
+                                <button id="create-listing-btn" class="btn btn-primary" onclick="showPage('create-listing-page')" style="display: none;">Create New Listing</button>
+                            </div>
                             <table class="listings-table">
                                 <thead>
                                     <tr>
@@ -963,6 +962,30 @@
 
                         <button type="submit" class="btn btn-primary" style="width: 100%; font-size: 1.1rem;">List
                             Item</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Create Listing Page -->
+        <section id="create-listing-page" class="page-section" style="display: none;">
+            <div class="container">
+                <div class="sell-form">
+                    <h2>Create a New Listing</h2>
+                    <form id="create-listing-form">
+                        <div class="form-group">
+                            <label>Product Name</label>
+                            <input type="text" id="listing-name" placeholder="e.g., Premium Brake Pads" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea id="listing-description" rows="4" placeholder="Describe the product..." required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Price (₦)</label>
+                            <input type="number" id="listing-price" placeholder="e.g., 25000" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Create Listing</button>
                     </form>
                 </div>
             </div>
