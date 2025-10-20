@@ -1292,3 +1292,8 @@ function handleMessageSend(event) {
         document.getElementById('message-text').value = '';
     }
 }
+
+// Mobile menu toggle
+document.querySelector('.mobile-menu-toggle').addEventListener('click', () => {
+    document.querySelector('.mobile-nav').classList.toggle('active');
+});
