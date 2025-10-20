@@ -681,7 +681,10 @@
 
                     <div class="profile-content">
                         <div id="profile-listings" class="profile-section active">
-                            <h2>My Listings</h2>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                                <h2>My Listings</h2>
+                                <button id="create-listing-btn" class="btn btn-primary" onclick="showPage('create-listing-page')" style="display: none;">Create New Listing</button>
+                            </div>
                             <table class="listings-table">
                                 <thead>
                                     <tr>
@@ -959,6 +962,30 @@
 
                         <button type="submit" class="btn btn-primary" style="width: 100%; font-size: 1.1rem;">List
                             Item</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Create Listing Page -->
+        <section id="create-listing-page" class="page-section" style="display: none;">
+            <div class="container">
+                <div class="sell-form">
+                    <h2>Create a New Listing</h2>
+                    <form id="create-listing-form">
+                        <div class="form-group">
+                            <label>Product Name</label>
+                            <input type="text" id="listing-name" placeholder="e.g., Premium Brake Pads" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea id="listing-description" rows="4" placeholder="Describe the product..." required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Price (₦)</label>
+                            <input type="number" id="listing-price" placeholder="e.g., 25000" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Create Listing</button>
                     </form>
                 </div>
             </div>
