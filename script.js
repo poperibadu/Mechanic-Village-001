@@ -495,7 +495,7 @@ async function createOrder(productId, quantity = 1) {
 
     try {
         // Get product details
-        const productRef = db.collection('products').doc(productId);
+        const productRef = db.collection('inventory').doc(String(productId));
         const productDoc = await productRef.get();
 
         if (!productDoc.exists) {
