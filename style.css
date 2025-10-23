@@ -1409,9 +1409,11 @@ body {
 .modal-content {
     background: #2d2d2d;
     border-radius: 15px;
-    padding: 2rem;
-    max-width: 400px;
+    padding: 1.5rem;
+    max-width: 450px;
     width: 90%;
+    max-height: 85vh;
+    overflow-y: auto;
     position: relative;
     border: 2px solid #404040;
 }
@@ -1434,28 +1436,31 @@ body {
 
 .modal h2 {
     color: #ffffff;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
     text-align: center;
+    font-size: 1.5rem;
 }
 
 .modal .form-group {
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
 }
 
 .modal .form-group label {
     display: block;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.3rem;
     color: #e0e0e0;
+    font-size: 0.9rem;
 }
 
-.modal .form-group input {
+.modal .form-group input,
+.modal .form-group select {
     width: 100%;
-    padding: 0.8rem;
+    padding: 0.7rem;
     border: 2px solid #404040;
     border-radius: 5px;
     background: #1a1a1a;
     color: #e0e0e0;
-    font-size: 1rem;
+    font-size: 0.95rem;
 }
 
 .modal .form-group input:focus {
@@ -1465,7 +1470,7 @@ body {
 
 .modal-footer {
     text-align: center;
-    margin-top: 1.5rem;
+    margin-top: 1rem;
 }
 
 .modal-footer p {
@@ -1762,10 +1767,30 @@ body {
 
     .mobile-menu-toggle {
         display: block;
+        order: 3;
+    }
+
+    .cart-icon {
+        order: 1;
+    }
+
+    #auth-buttons-guest,
+    #auth-buttons-user {
+        display: none !important;
     }
 
     .mobile-nav {
+        display: none;
+    }
+
+    .mobile-nav.active {
         display: block;
+    }
+
+    .auth-buttons {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
     }
 
     .main-content {

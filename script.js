@@ -884,6 +884,54 @@ function loadFeaturedProductsFromMock() {
     });
 }
 
+// Load featured mechanics on home page
+async function loadFeaturedMechanics() {
+    const homeGrid = document.getElementById('home-mechanics-grid');
+    if (!homeGrid) return;
+
+    try {
+        const featuredMechanicsSnapshot = await db.collection('users').where('role', '==', 'mechanic').orderBy('rating', 'desc').limit(6).get();
+        homeGrid.innerHTML = '';
+
+        featuredMechanicsSnapshot.forEach(doc => {
+            const mechanicData = doc.data();
+            const mechanic = {
+                id: doc.id,
+                name: mechanicData.name,
+                specialization: mechanicData.specialization || 'general',
+                location: mechanicData.location,
+                experience: mechanicData.experience || '5 Years',
+                rating: mechanicData.rating || 4.5,
+                reviews: mechanicData.reviews || 0,
+                price: mechanicData.price_per_hour || 5000,
+                image: '👨‍🔧',
+                services: mechanicData.services || []
+            };
+            const card = createMechanicCard(mechanic);
+            homeGrid.appendChild(card);
+        });
+    } catch (error) {
+        console.error('Error loading featured mechanics:', error);
+        loadFeaturedMechanicsFromMock();
+    }
+}
+
+// Fallback function for featured mechanics
+function loadFeaturedMechanicsFromMock() {
+    const homeGrid = document.getElementById('home-mechanics-grid');
+    if (!homeGrid) return;
+
+    homeGrid.innerHTML = '';
+
+    // Show first 6 mechanics as featured
+    const featuredMechanics = mechanics.slice(0, 6);
+
+    featuredMechanics.forEach(mechanic => {
+        const card = createMechanicCard(mechanic);
+        homeGrid.appendChild(card);
+    });
+}
+
 // AI Diagnosis functionality
 function runAIDiagnosis() {
     const symptom = document.getElementById('diagnosis-input').value;
@@ -1265,6 +1313,11 @@ document.addEventListener('DOMContentLoaded', () => {
         loadFeaturedProducts();
     } else {
         loadFeaturedProductsFromMock();
+    }
+    if (typeof loadFeaturedMechanics === 'function') {
+        loadFeaturedMechanics();
+    } else {
+        loadFeaturedMechanicsFromMock();
     }
     if (typeof subscribeToInventoryChanges === 'function') {
         subscribeToInventoryChanges();

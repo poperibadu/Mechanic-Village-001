@@ -39,8 +39,6 @@
                     <span class="cart-count">3</span>
                 </button>
 
-                <button class="mobile-menu-toggle">☰</button>
-
                 <!-- Guest buttons -->
                 <div id="auth-buttons-guest" style="display: flex; gap: 1rem;">
                     <a href="#" class="btn btn-outline" onclick="showLoginModal()">Login</a>
@@ -52,9 +50,9 @@
                     <span class="user-greeting">Welcome, <span id="user-name">User</span>!</span>
                     <a href="#" class="btn btn-outline" onclick="logout()">Logout</a>
                 </div>
-            </div>
 
-            <button class="mobile-menu-toggle">☰</button>
+                <button class="mobile-menu-toggle">☰</button>
+            </div>
         </div>
     </header>
 
@@ -227,6 +225,20 @@
                     <div style="text-align: center; margin-top: 2rem;">
                         <button class="btn btn-primary" onclick="showPage('listings')"
                             style="font-size: 1.1rem; padding: 1rem 2rem;">View All Products</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Featured Mechanics Section -->
+            <div class="features-section">
+                <div class="container">
+                    <h2 style="text-align: center; margin-bottom: 2rem; color: #ffffff;">Featured Mechanics</h2>
+                    <div class="listings-grid" id="home-mechanics-grid" style="margin-top: 2rem;">
+                        <!-- Featured mechanics will be populated by JavaScript -->
+                    </div>
+                    <div style="text-align: center; margin-top: 2rem;">
+                        <button class="btn btn-primary" onclick="showPage('mechanics')"
+                            style="font-size: 1.1rem; padding: 1rem 2rem;">View All Mechanics</button>
                     </div>
                 </div>
             </div>
