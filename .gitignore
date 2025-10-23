@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+*.egg-info/
+dist/
+build/
+
+# Firebase
+.firebase/
+firebase-debug.log
+firestore-debug.log
+
+# System
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+
+# Test files
+jules-scratch/
+tests/
+verify*.py
+verification_error.png
+verify_order_failed.png
