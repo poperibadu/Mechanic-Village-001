@@ -1,14 +1,12 @@
-// Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyBftANZjTsEOoGmHaDwJb9JwXhHQK8j6KY",
-  authDomain: "mechanic-db779.firebaseapp.com",
-  projectId: "mechanic-db779",
-  storageBucket: "mechanic-db779.firebasestorage.app",
-  messagingSenderId: "98926639697",
-  appId: "1:98926639697:web:1b1a380fccfb411871d670",
-  measurementId: "G-C1REMEN7SD"
-};
-
+    apiKey: "AIzaSyAvaRLzt06jzvRoifsfHNaqB5zm8r0HNWg",
+    authDomain: "mechanic-villa-002-34588-5325b.firebaseapp.com",
+    projectId: "mechanic-villa-002-34588-5325b",
+    storageBucket: "mechanic-villa-002-34588-5325b.firebasestorage.app",
+    messagingSenderId: "704457445615",
+    appId: "1:704457445615:web:d119b1cec548e801d78b1a"
+  };
+  
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();

@@ -1,12 +1,10 @@
 {
   "hosting": {
-    "public": ".",
-    "ignore": [
+    "public": ".","ignore": [
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
-    ],
-    "headers": [
+    ],"headers": [
       {
         "source": "/*",
         "headers": [
@@ -38,5 +36,8 @@
         ]
       }
     ]
+  },
+  "firestore": {
+    "rules": "firestore.rules"
   }
 }

@@ -1,0 +1,38 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isAuthenticatedAndVerified() {
+      return request.auth != null && request.auth.token.email_verified;
+    }
+
+    function isAdmin() {
+      return isAuthenticatedAndVerified() &&
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    match /users/{userId} {
+      allow read: if request.auth != null;
+      allow write: if (isAuthenticatedAndVerified() && request.auth.uid == userId) || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    match /inventory/{productId} {
+      allow read: if isAuthenticatedAndVerified();
+      allow create: if isAuthenticatedAndVerified();
+      allow update: if (isAuthenticatedAndVerified() && request.auth.uid == resource.data.sellerId) || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    match /orders/{orderId} {
+      allow read: if (isAuthenticatedAndVerified() && request.auth.uid == resource.data.customerId) || isAdmin();
+      allow create: if isAuthenticatedAndVerified();
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    match /statistics/{statId} {
+      allow read: if isAuthenticatedAndVerified();
+      allow write: if isAdmin();
+    }
+  }
+}

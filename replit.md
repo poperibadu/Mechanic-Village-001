@@ -30,7 +30,7 @@ Mechanic Village is a modern, responsive single-page application (SPA) designed 
 - Customer Support Chatbot
 
 ## Firebase Configuration
-The Firebase project is already configured in `script.js`. The application connects to the live Firebase project `mechanic-db779`.
+The Firebase project is already configured in `script.js`. The application connects to the live Firebase project `mechanic-villa-002-34588-5325b`.
 
 **Note**: Firebase API keys in client-side code are public by design. Security is enforced through Firebase Security Rules on the backend, not by hiding the API key.
 
