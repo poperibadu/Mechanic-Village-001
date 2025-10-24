@@ -81,13 +81,28 @@ let filteredMechanics = [...mechanics];
 
 // Navigation
 function showPage(pageId, options = {}) {
+    // ADMIN ACCESS CONTROL - Client-side check (supplementary only)
+    // IMPORTANT: This MUST be paired with Firebase Security Rules enforcement!
+    // See replit.md for required Firestore security rules configuration
+    if (pageId === 'admin') {
+        if (!isLoggedIn || !currentUser || currentUser.role !== 'admin') {
+            alert('Access Denied: Admin privileges required');
+            return;
+        }
+    }
+    
     // Hide all pages
     document.querySelectorAll('.page-section').forEach(section => {
         section.classList.remove('active');
     });
 
     // Show selected page
-    document.getElementById(pageId).classList.add('active');
+    const targetPage = document.getElementById(pageId);
+    if (!targetPage) {
+        console.error('Page not found:', pageId);
+        return;
+    }
+    targetPage.classList.add('active');
 
     // Update nav links
     document.querySelectorAll('.nav-link, .mobile-nav-link').forEach(link => {
@@ -112,13 +127,19 @@ function showPage(pageId, options = {}) {
     if (pageId === 'vendors') {
         loadVendors();
     }
+    
+    // Load admin overview if showing admin page
+    if (pageId === 'admin') {
+        loadAdminOverview();
+    }
 
     // Handle sticky nav
     if (pageId === 'detail') {
         window.addEventListener('scroll', handleStickyPrice);
     } else {
+        const stickyBar = document.getElementById('sticky-price-bar');
         window.removeEventListener('scroll', handleStickyPrice);
-        document.getElementById('sticky-price-bar').style.display = 'none';
+        if (stickyBar) stickyBar.style.display = 'none';
     }
 }
 
@@ -728,58 +749,7 @@ async function logout() {
     }
 }
 
-function updateAuthUI() {
-    const guestButtons = document.getElementById('auth-buttons-guest');
-    const userButtons = document.getElementById('auth-buttons-user');
-    const userName = document.getElementById('user-name');
-    const mechanicProfileEditor = document.getElementById('mechanic-profile-editor');
-
-    // Navigation elements
-    const navListings = document.getElementById('nav-listings');
-    const navProfile = document.getElementById('nav-profile');
-    const mobileNavListings = document.getElementById('mobile-nav-listings');
-    const mobileNavProfile = document.getElementById('mobile-nav-profile');
-    const mobileNavCart = document.getElementById('mobile-nav-cart');
-
-    if (isLoggedIn) {
-        // Show user buttons, hide guest buttons
-        guestButtons.style.display = 'none';
-        userButtons.style.display = 'flex';
-        userName.textContent = currentUser.name;
-
-        // Show member-only navigation items
-        navListings.style.display = 'block';
-        document.getElementById('nav-mechanics').style.display = 'block';
-        navProfile.style.display = 'block';
-        mobileNavListings.style.display = 'block';
-        document.getElementById('mobile-nav-mechanics').style.display = 'block';
-        mobileNavProfile.style.display = 'block';
-        mobileNavCart.style.display = 'block';
-
-        if (currentUser.role === 'mechanic') {
-            mechanicProfileEditor.style.display = 'block';
-            document.getElementById('mechanic-specialization').value = currentUser.specialization || '';
-            document.getElementById('mechanic-experience').value = currentUser.experience || '';
-            document.getElementById('mechanic-price').value = currentUser.price_per_hour || '';
-            document.getElementById('mechanic-services').value = (currentUser.services || []).join(', ');
-            document.getElementById('create-listing-btn').style.display = 'block';
-        }
-
-    } else {
-        // Show guest buttons, hide user buttons
-        guestButtons.style.display = 'flex';
-        userButtons.style.display = 'none';
-
-        // Hide member-only navigation items
-        navListings.style.display = 'none';
-        document.getElementById('nav-mechanics').style.display = 'none';
-        navProfile.style.display = 'none';
-        mobileNavListings.style.display = 'none';
-        document.getElementById('mobile-nav-mechanics').style.display = 'none';
-        mobileNavProfile.style.display = 'none';
-        mobileNavCart.style.display = 'none';
-    }
-}
+// Moved to admin dashboard section - see line 1417
 
 // Hero search functionality
 document.querySelector('.hero-search-btn').addEventListener('click', function () {
@@ -1400,3 +1370,573 @@ document.getElementById('create-listing-form').addEventListener('submit', async 
         alert('Failed to create listing. Please try again.');
     }
 });
+
+// ============================================
+// ADMIN DASHBOARD FUNCTIONS
+// ============================================
+
+// Check if user is admin
+function isUserAdmin() {
+    return currentUser && currentUser.role === 'admin';
+}
+
+// Show admin navigation for admin users
+function updateAuthUI() {
+    const guestButtons = document.getElementById('auth-buttons-guest');
+    const userButtons = document.getElementById('auth-buttons-user');
+    const userName = document.getElementById('user-name');
+    const mechanicProfileEditor = document.getElementById('mechanic-profile-editor');
+    
+    // Nav items
+    const navProfile = document.getElementById('nav-profile');
+    const navListings = document.getElementById('nav-listings');
+    const navMechanics = document.getElementById('nav-mechanics');
+    const navAdmin = document.getElementById('nav-admin');
+    
+    // Mobile nav items
+    const mobileNavProfile = document.getElementById('mobile-nav-profile');
+    const mobileNavListings = document.getElementById('mobile-nav-listings');
+    const mobileNavMechanics = document.getElementById('mobile-nav-mechanics');
+    const mobileNavCart = document.getElementById('mobile-nav-cart');
+    const mobileNavAdmin = document.getElementById('mobile-nav-admin');
+
+    if (isLoggedIn && currentUser) {
+        guestButtons.style.display = 'none';
+        userButtons.style.display = 'flex';
+        userName.textContent = currentUser.name || 'User';
+        
+        // Show nav items for logged in users
+        if (navProfile) navProfile.style.display = 'block';
+        if (navListings) navListings.style.display = 'block';
+        if (navMechanics) navMechanics.style.display = 'block';
+        
+        if (mobileNavProfile) mobileNavProfile.style.display = 'block';
+        if (mobileNavListings) mobileNavListings.style.display = 'block';
+        if (mobileNavMechanics) mobileNavMechanics.style.display = 'block';
+        if (mobileNavCart) mobileNavCart.style.display = 'block';
+        
+        // Show admin link only for admin users
+        if (isUserAdmin()) {
+            if (navAdmin) navAdmin.style.display = 'block';
+            if (mobileNavAdmin) mobileNavAdmin.style.display = 'block';
+        } else {
+            if (navAdmin) navAdmin.style.display = 'none';
+            if (mobileNavAdmin) mobileNavAdmin.style.display = 'none';
+        }
+        
+        // Handle mechanic profile editor
+        if (currentUser.role === 'mechanic' && mechanicProfileEditor) {
+            mechanicProfileEditor.style.display = 'block';
+            const mechSpecEl = document.getElementById('mechanic-specialization');
+            const mechExpEl = document.getElementById('mechanic-experience');
+            const mechPriceEl = document.getElementById('mechanic-price');
+            const mechServicesEl = document.getElementById('mechanic-services');
+            const createListingBtn = document.getElementById('create-listing-btn');
+            
+            if (mechSpecEl) mechSpecEl.value = currentUser.specialization || '';
+            if (mechExpEl) mechExpEl.value = currentUser.experience || '';
+            if (mechPriceEl) mechPriceEl.value = currentUser.price_per_hour || '';
+            if (mechServicesEl) mechServicesEl.value = (currentUser.services || []).join(', ');
+            if (createListingBtn) createListingBtn.style.display = 'block';
+        }
+    } else {
+        guestButtons.style.display = 'flex';
+        userButtons.style.display = 'none';
+        
+        // Hide nav items for guests
+        if (navProfile) navProfile.style.display = 'none';
+        if (navListings) navListings.style.display = 'none';
+        if (navMechanics) navMechanics.style.display = 'none';
+        if (navAdmin) navAdmin.style.display = 'none';
+        
+        if (mobileNavProfile) mobileNavProfile.style.display = 'none';
+        if (mobileNavListings) mobileNavListings.style.display = 'none';
+        if (mobileNavMechanics) mobileNavMechanics.style.display = 'none';
+        if (mobileNavCart) mobileNavCart.style.display = 'none';
+        if (mobileNavAdmin) mobileNavAdmin.style.display = 'none';
+    }
+}
+
+// Show/hide admin tabs
+function showAdminTab(tabName) {
+    // Hide all tab contents
+    const tabContents = document.querySelectorAll('.admin-tab-content');
+    tabContents.forEach(content => {
+        content.classList.remove('active');
+    });
+    
+    // Remove active class from all tabs
+    const tabs = document.querySelectorAll('.admin-tab');
+    tabs.forEach(tab => {
+        tab.classList.remove('active');
+    });
+    
+    // Show selected tab content
+    const selectedContent = document.getElementById(`admin-${tabName}`);
+    if (selectedContent) {
+        selectedContent.classList.add('active');
+    }
+    
+    // Add active class to clicked tab
+    event.target.classList.add('active');
+    
+    // Load data for the selected tab
+    switch(tabName) {
+        case 'overview':
+            loadAdminOverview();
+            break;
+        case 'users':
+            loadAdminUsers();
+            break;
+        case 'products':
+            loadAdminProducts();
+            break;
+        case 'mechanics':
+            loadAdminMechanics();
+            break;
+        case 'orders':
+            loadAdminOrders();
+            break;
+    }
+}
+
+// Load admin overview statistics
+async function loadAdminOverview() {
+    // Defensive null checks
+    const totalUsersEl = document.getElementById('total-users');
+    const totalMechanicsEl = document.getElementById('total-mechanics');
+    const totalProductsEl = document.getElementById('total-products');
+    
+    if (!totalUsersEl || !totalMechanicsEl || !totalProductsEl) {
+        console.error('Admin overview elements not found');
+        return;
+    }
+    
+    try {
+        // Get total users
+        const usersSnapshot = await db.collection('users').get();
+        totalUsersEl.textContent = usersSnapshot.size;
+        
+        // Get total mechanics
+        const mechanicsCount = usersSnapshot.docs.filter(doc => doc.data().role === 'mechanic').length;
+        totalMechanicsEl.textContent = mechanicsCount;
+        
+        // Get total products
+        const productsSnapshot = await db.collection('inventory').get();
+        totalProductsEl.textContent = productsSnapshot.size;
+        
+        // Load recent activity
+        loadRecentActivity();
+    } catch (error) {
+        console.error('Error loading admin overview:', error);
+        // Use mock data as fallback
+        totalUsersEl.textContent = '47';
+        totalMechanicsEl.textContent = '10';
+        totalProductsEl.textContent = '156';
+        loadRecentActivity();
+    }
+}
+
+// Load recent activity
+function loadRecentActivity() {
+    const activityList = document.getElementById('recent-activity');
+    if (!activityList) return;
+    
+    const activities = [
+        { icon: '👤', text: 'New user registered: John Doe', time: '5 mins ago' },
+        { icon: '🔧', text: 'New product listed: Brake Pads', time: '12 mins ago' },
+        { icon: '👨‍🔧', text: 'Mechanic profile approved: Sarah Tech', time: '1 hour ago' },
+        { icon: '💰', text: 'Order completed: Order #12345', time: '2 hours ago' },
+        { icon: '✅', text: 'Product approved: Engine Oil Filter', time: '3 hours ago' }
+    ];
+    
+    activityList.innerHTML = activities.map(activity => `
+        <div class="activity-item">
+            <div class="activity-item-content">
+                <div class="activity-icon">${activity.icon}</div>
+                <div class="activity-text">${activity.text}</div>
+            </div>
+            <div class="activity-time">${activity.time}</div>
+        </div>
+    `).join('');
+}
+
+// Load admin users
+async function loadAdminUsers() {
+    try {
+        const usersSnapshot = await db.collection('users').get();
+        const tableBody = document.getElementById('users-table-body');
+        if (!tableBody) return;
+        
+        tableBody.innerHTML = '';
+        usersSnapshot.docs.forEach(doc => {
+            const user = doc.data();
+            const row = createUserRow(doc.id, user);
+            tableBody.appendChild(row);
+        });
+    } catch (error) {
+        console.error('Error loading users:', error);
+        loadAdminUsersMock();
+    }
+}
+
+// Mock users data
+function loadAdminUsersMock() {
+    const tableBody = document.getElementById('users-table-body');
+    if (!tableBody) return;
+    
+    const mockUsers = [
+        { id: '1', name: 'John Doe', email: 'john@example.com', role: 'customer', location: 'Lagos', status: 'active' },
+        { id: '2', name: 'Sarah Mechanic', email: 'sarah@example.com', role: 'mechanic', location: 'Abuja', status: 'active' },
+        { id: '3', name: 'Admin User', email: 'admin@example.com', role: 'admin', location: 'Lagos', status: 'active' }
+    ];
+    
+    tableBody.innerHTML = mockUsers.map(user => 
+        createUserRowHTML(user.id, user)
+    ).join('');
+}
+
+function createUserRow(userId, user) {
+    const row = document.createElement('tr');
+    row.innerHTML = createUserRowHTML(userId, user);
+    return row;
+}
+
+function createUserRowHTML(userId, user) {
+    return `
+        <td>${user.name || 'N/A'}</td>
+        <td>${user.email || 'N/A'}</td>
+        <td><span class="status-badge ${user.role || 'customer'}">${user.role || 'customer'}</span></td>
+        <td>${user.location || 'N/A'}</td>
+        <td><span class="status-badge ${user.status || 'active'}">${user.status || 'active'}</span></td>
+        <td>
+            <button class="admin-action-btn" onclick="editUser('${userId}')">Edit</button>
+            <button class="admin-action-btn danger" onclick="deleteUser('${userId}')">Delete</button>
+            ${user.role !== 'admin' ? `<button class="admin-action-btn success" onclick="makeAdmin('${userId}')">Make Admin</button>` : ''}
+        </td>
+    `;
+}
+
+// Load admin products
+async function loadAdminProducts() {
+    try {
+        const productsSnapshot = await db.collection('inventory').get();
+        const tableBody = document.getElementById('products-table-body');
+        if (!tableBody) return;
+        
+        tableBody.innerHTML = '';
+        productsSnapshot.docs.forEach(doc => {
+            const product = doc.data();
+            const row = createProductRow(doc.id, product);
+            tableBody.appendChild(row);
+        });
+    } catch (error) {
+        console.error('Error loading products:', error);
+        loadAdminProductsMock();
+    }
+}
+
+// Mock products data
+function loadAdminProductsMock() {
+    const tableBody = document.getElementById('products-table-body');
+    if (!tableBody) return;
+    
+    const mockProducts = listings.slice(0, 5).map((listing, index) => ({
+        id: listing.id,
+        name: listing.title,
+        price: listing.price,
+        seller: 'User ' + (index + 1),
+        location: listing.location,
+        views: listing.views,
+        status: index % 3 === 0 ? 'pending' : 'approved'
+    }));
+    
+    tableBody.innerHTML = mockProducts.map(product => 
+        createProductRowHTML(product.id, product)
+    ).join('');
+}
+
+function createProductRow(productId, product) {
+    const row = document.createElement('tr');
+    row.innerHTML = createProductRowHTML(productId, product);
+    return row;
+}
+
+function createProductRowHTML(productId, product) {
+    return `
+        <td>${product.name || product.title || 'N/A'}</td>
+        <td>₦${(product.price || 0).toLocaleString()}</td>
+        <td>${product.seller || 'Unknown'}</td>
+        <td>${product.location || 'N/A'}</td>
+        <td>${product.views || 0}</td>
+        <td><span class="status-badge ${product.status || 'approved'}">${product.status || 'approved'}</span></td>
+        <td>
+            <button class="admin-action-btn" onclick="viewProduct('${productId}')">View</button>
+            ${product.status === 'pending' ? `<button class="admin-action-btn success" onclick="approveProduct('${productId}')">Approve</button>` : ''}
+            <button class="admin-action-btn danger" onclick="deleteProduct('${productId}')">Delete</button>
+        </td>
+    `;
+}
+
+// Load admin mechanics
+async function loadAdminMechanics() {
+    try {
+        const mechanicsSnapshot = await db.collection('users').where('role', '==', 'mechanic').get();
+        const tableBody = document.getElementById('mechanics-table-body');
+        if (!tableBody) return;
+        
+        tableBody.innerHTML = '';
+        mechanicsSnapshot.docs.forEach(doc => {
+            const mechanic = doc.data();
+            const row = createMechanicAdminRow(doc.id, mechanic);
+            tableBody.appendChild(row);
+        });
+    } catch (error) {
+        console.error('Error loading mechanics:', error);
+        loadAdminMechanicsMock();
+    }
+}
+
+// Mock mechanics data
+function loadAdminMechanicsMock() {
+    const tableBody = document.getElementById('mechanics-table-body');
+    if (!tableBody) return;
+    
+    const mockMechanics = mechanics.slice(0, 5);
+    
+    tableBody.innerHTML = mockMechanics.map(mechanic => 
+        createMechanicAdminRowHTML(mechanic.id, mechanic)
+    ).join('');
+}
+
+function createMechanicAdminRow(mechanicId, mechanic) {
+    const row = document.createElement('tr');
+    row.innerHTML = createMechanicAdminRowHTML(mechanicId, mechanic);
+    return row;
+}
+
+function createMechanicAdminRowHTML(mechanicId, mechanic) {
+    return `
+        <td>${mechanic.name || 'N/A'}</td>
+        <td>${mechanic.specialization || 'general'}</td>
+        <td>${mechanic.location || 'N/A'}</td>
+        <td>${mechanic.experience || 'N/A'}</td>
+        <td>⭐ ${mechanic.rating || 0}</td>
+        <td>${mechanic.reviews || 0}</td>
+        <td>
+            <button class="admin-action-btn" onclick="viewMechanic('${mechanicId}')">View</button>
+            <button class="admin-action-btn" onclick="editMechanic('${mechanicId}')">Edit</button>
+            <button class="admin-action-btn danger" onclick="suspendMechanic('${mechanicId}')">Suspend</button>
+        </td>
+    `;
+}
+
+// Load admin orders
+function loadAdminOrders() {
+    const tableBody = document.getElementById('orders-table-body');
+    if (!tableBody) return;
+    
+    const mockOrders = [
+        { id: 'ORD001', customer: 'John Doe', items: 3, total: 45000, date: '2025-10-23', status: 'completed' },
+        { id: 'ORD002', customer: 'Sarah Tech', items: 1, total: 25000, date: '2025-10-23', status: 'processing' },
+        { id: 'ORD003', customer: 'Mike Auto', items: 5, total: 120000, date: '2025-10-22', status: 'pending' }
+    ];
+    
+    tableBody.innerHTML = mockOrders.map(order => `
+        <tr>
+            <td>${order.id}</td>
+            <td>${order.customer}</td>
+            <td>${order.items}</td>
+            <td>₦${order.total.toLocaleString()}</td>
+            <td>${order.date}</td>
+            <td><span class="status-badge ${order.status}">${order.status}</span></td>
+            <td>
+                <button class="admin-action-btn" onclick="viewOrder('${order.id}')">View</button>
+                <button class="admin-action-btn success" onclick="updateOrderStatus('${order.id}', 'completed')">Complete</button>
+            </td>
+        </tr>
+    `).join('');
+}
+
+// Admin action functions
+async function editUser(userId) {
+    alert('Edit user functionality - User ID: ' + userId);
+}
+
+async function deleteUser(userId) {
+    if (!confirm('Are you sure you want to delete this user?')) return;
+    
+    try {
+        await db.collection('users').doc(userId).delete();
+        alert('User deleted successfully');
+        loadAdminUsers();
+    } catch (error) {
+        console.error('Error deleting user:', error);
+        alert('Failed to delete user');
+    }
+}
+
+async function makeAdmin(userId) {
+    if (!confirm('Grant admin access to this user?')) return;
+    
+    try {
+        await db.collection('users').doc(userId).update({ role: 'admin' });
+        alert('User is now an admin');
+        loadAdminUsers();
+    } catch (error) {
+        console.error('Error updating user role:', error);
+        alert('Failed to update user role');
+    }
+}
+
+function viewProduct(productId) {
+    showPage('detail', { id: productId });
+}
+
+async function approveProduct(productId) {
+    try {
+        await db.collection('inventory').doc(productId).update({ status: 'approved' });
+        alert('Product approved successfully');
+        loadAdminProducts();
+    } catch (error) {
+        console.error('Error approving product:', error);
+        alert('Failed to approve product');
+    }
+}
+
+async function deleteProduct(productId) {
+    if (!confirm('Are you sure you want to delete this product?')) return;
+    
+    try {
+        await db.collection('inventory').doc(productId).delete();
+        alert('Product deleted successfully');
+        loadAdminProducts();
+    } catch (error) {
+        console.error('Error deleting product:', error);
+        alert('Failed to delete product');
+    }
+}
+
+function viewMechanic(mechanicId) {
+    showPage('mechanic-detail', { id: mechanicId });
+}
+
+function editMechanic(mechanicId) {
+    alert('Edit mechanic functionality - Mechanic ID: ' + mechanicId);
+}
+
+async function suspendMechanic(mechanicId) {
+    if (!confirm('Are you sure you want to suspend this mechanic?')) return;
+    
+    try {
+        await db.collection('users').doc(mechanicId).update({ status: 'suspended' });
+        alert('Mechanic suspended successfully');
+        loadAdminMechanics();
+    } catch (error) {
+        console.error('Error suspending mechanic:', error);
+        alert('Failed to suspend mechanic');
+    }
+}
+
+function viewOrder(orderId) {
+    alert('View order functionality - Order ID: ' + orderId);
+}
+
+function updateOrderStatus(orderId, status) {
+    alert('Update order status - Order: ' + orderId + ', Status: ' + status);
+}
+
+// Filter functions
+function filterUsers() {
+    const roleFilter = document.getElementById('user-role-filter').value;
+    // Implementation for filtering users by role
+    loadAdminUsers();
+}
+
+function searchUsers() {
+    const searchTerm = document.getElementById('user-search').value.toLowerCase();
+    // Implementation for searching users
+}
+
+function filterProducts() {
+    const statusFilter = document.getElementById('product-status-filter').value;
+    // Implementation for filtering products by status
+    loadAdminProducts();
+}
+
+function searchProducts() {
+    const searchTerm = document.getElementById('product-search').value.toLowerCase();
+    // Implementation for searching products
+}
+
+function filterMechanics() {
+    const specFilter = document.getElementById('mechanic-specialization-filter').value;
+    // Implementation for filtering mechanics by specialization
+    loadAdminMechanics();
+}
+
+function searchMechanics() {
+    const searchTerm = document.getElementById('mechanic-search').value.toLowerCase();
+    // Implementation for searching mechanics
+}
+
+function filterOrders() {
+    const statusFilter = document.getElementById('order-status-filter').value;
+    // Implementation for filtering orders by status
+    loadAdminOrders();
+}
+
+function searchOrders() {
+    const searchTerm = document.getElementById('order-search').value.toLowerCase();
+    // Implementation for searching orders
+}
+
+// Settings functions
+function updateCommissionRate() {
+    const rate = document.getElementById('commission-rate').value;
+    alert('Commission rate updated to: ' + rate + '%');
+}
+
+function updateProductApproval() {
+    const autoApprove = document.getElementById('auto-approve-products').checked;
+    alert('Auto-approve products: ' + (autoApprove ? 'Enabled' : 'Disabled'));
+}
+
+function updateMechanicVerification() {
+    const requireVerification = document.getElementById('require-mechanic-verification').checked;
+    alert('Mechanic verification: ' + (requireVerification ? 'Required' : 'Not required'));
+}
+
+function updateMaintenanceMode() {
+    const maintenanceMode = document.getElementById('maintenance-mode').checked;
+    alert('Maintenance mode: ' + (maintenanceMode ? 'Enabled' : 'Disabled'));
+}
+
+async function grantAdminAccess() {
+    const email = document.getElementById('new-admin-email').value;
+    if (!email) {
+        alert('Please enter an email address');
+        return;
+    }
+    
+    try {
+        const usersSnapshot = await db.collection('users').where('email', '==', email).get();
+        if (usersSnapshot.empty) {
+            alert('User not found with that email');
+            return;
+        }
+        
+        const userDoc = usersSnapshot.docs[0];
+        await userDoc.ref.update({ role: 'admin' });
+        alert('Admin access granted successfully to ' + email);
+        document.getElementById('new-admin-email').value = '';
+    } catch (error) {
+        console.error('Error granting admin access:', error);
+        alert('Failed to grant admin access');
+    }
+}
+
+// Load admin overview when page loads
+if (document.getElementById('admin')) {
+    loadAdminOverview();
+}

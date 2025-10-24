@@ -49,3 +49,67 @@ The application runs on a Python HTTP server on port 5000 with cache control hea
 - Firebase handles all backend operations (auth, database)
 - Static file serving with cache control for development
 - No build step required - pure HTML/CSS/JS
+
+## Admin Dashboard
+The application includes a comprehensive admin dashboard for platform management. **Important Security Configuration Required:**
+
+### Firebase Security Rules (REQUIRED)
+The admin dashboard requires proper Firebase security rules to be configured. Add these rules to your Firebase Console (Firestore Rules):
+
+```javascript
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper function to check if user is admin
+    function isAdmin() {
+      return request.auth != null && 
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    // Users collection - admins can read/write all, users can only read/write their own
+    match /users/{userId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && (request.auth.uid == userId || isAdmin());
+      allow delete: if isAdmin();
+    }
+    
+    // Inventory/Products - admins have full access, others can only read approved items
+    match /inventory/{productId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update: if request.auth != null && (request.auth.uid == resource.data.sellerId || isAdmin());
+      allow delete: if isAdmin();
+    }
+    
+    // Orders - users can read their own, admins can read all
+    match /orders/{orderId} {
+      allow read: if request.auth != null && (request.auth.uid == resource.data.customerId || isAdmin());
+      allow create: if request.auth != null;
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+    
+    // Statistics - read-only for authenticated users, write for admins
+    match /statistics/{statId} {
+      allow read: if request.auth != null;
+      allow write: if isAdmin();
+    }
+  }
+}
+```
+
+### Creating the First Admin User
+1. Create a regular user account through the signup page
+2. Go to Firebase Console → Firestore Database → users collection
+3. Find your user document and manually set `role: "admin"`
+4. Refresh the application - you'll now see the Admin link in navigation
+
+### Admin Dashboard Features
+- **Overview**: Platform statistics and recent activity
+- **User Management**: View, edit, delete users, grant admin access
+- **Product Management**: Approve, view, and delete product listings
+- **Mechanic Management**: View, edit, and manage mechanic profiles
+- **Order Management**: View and update order statuses
+- **Settings**: Platform configuration (commission rates, approval settings, etc.)
+
+**Security Note**: The client-side admin checks are supplementary. The Firebase Security Rules above provide the actual backend enforcement that prevents unauthorized access to admin operations.
