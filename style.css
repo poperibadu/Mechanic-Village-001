@@ -289,7 +289,7 @@ body {
 /* Hero Section */
 .hero {
     position: relative;
-    padding: 4rem 0;
+    padding: 2rem 0;
     text-align: center;
     overflow: hidden;
     min-height: 500px;
@@ -1812,7 +1812,11 @@ body {
     }
 
     .hero h1 {
-        font-size: 2rem;
+        font-size: 1.8rem;
+    }
+
+    .hero p {
+        font-size: 1rem;
     }
 
     .detail-page {
@@ -1834,11 +1838,11 @@ body {
     }
 
     .ai-diagnosis-content {
-        padding: 2rem;
+        padding: 1.5rem;
     }
 
     .ai-diagnosis-content h2 {
-        font-size: 2rem;
+        font-size: 1.8rem;
     }
 
     .car-details {
@@ -1860,13 +1864,15 @@ body {
     }
 
     .hero-search-input {
-        font-size: 1rem;
+        font-size: 0.9rem;
+        padding: 0.8rem 1rem;
     }
 
     .hero-search-btn {
         position: static;
         transform: none;
         width: 100%;
+        padding: 0.8rem 1rem;
     }
 
     .hero-browse-btn {
@@ -1875,6 +1881,10 @@ body {
 }
 
 @media (max-width: 480px) {
+    #home .listings-grid {
+        grid-template-columns: 1fr;
+    }
+
     .listings-grid {
         grid-template-columns: 1fr;
     }
