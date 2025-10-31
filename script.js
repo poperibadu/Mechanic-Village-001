@@ -549,7 +549,7 @@ async function createOrder(productId, quantity = 1) {
 // Update inventory
 async function updateInventory(productId, quantityChange) {
     try {
-        const inventoryRef = db.collection('inventory').doc(productId);
+        const inventoryRef = db.collection('inventory').doc(String(productId));
 
         await db.runTransaction(async (transaction) => {
             const inventoryDoc = await transaction.get(inventoryRef);
@@ -568,7 +568,7 @@ async function updateInventory(productId, quantityChange) {
 // Get inventory level for a product
 async function getInventoryLevel(productId) {
     try {
-        const inventoryRef = db.collection('inventory').doc(productId);
+        const inventoryRef = db.collection('inventory').doc(String(productId));
         const inventoryDoc = await inventoryRef.get();
 
         if (!inventoryDoc.exists) {
